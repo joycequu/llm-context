@@ -26,25 +26,25 @@ with open('/mnt/align4_drive/joycequ/llm-context/dan_control.txt', 'r') as file:
 max_chars = 4000
 random_text_prompt = f"Generate some random text of {max_chars} characters"
 
-local_model_dir = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
+# local_model_dir = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
 
 @torch.inference_mode()
 def main(args):
     # Load model
-    # model, tokenizer = load_model(
-    #     args.model_path,
-    #     device=args.device,
-    #     num_gpus=args.num_gpus,
-    #     max_gpu_memory=args.max_gpu_memory,
-    #     load_8bit=args.load_8bit,
-    #     cpu_offloading=args.cpu_offloading,
-    #     revision=args.revision,
-    #     debug=args.debug,
-    # )
+    model, tokenizer = load_model(
+        args.model_path,
+        device=args.device,
+        num_gpus=args.num_gpus,
+        max_gpu_memory=args.max_gpu_memory,
+        load_8bit=args.load_8bit,
+        cpu_offloading=args.cpu_offloading,
+        revision=args.revision,
+        debug=args.debug,
+    )
 
-    config = AutoConfig.from_pretrained(local_model_dir)
-    tokenizer = AutoTokenizer.from_pretrained(local_model_dir)
-    model = AutoModel.from_pretrained(local_model_dir, config=config)
+    # config = AutoConfig.from_pretrained(local_model_dir)
+    # tokenizer = AutoTokenizer.from_pretrained(local_model_dir)
+    # model = AutoModel.from_pretrained(local_model_dir, config=config)
     
     data = read_data(args)
     if args.debug:
