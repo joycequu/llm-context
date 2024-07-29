@@ -13,9 +13,6 @@ from fastchat.model import load_model, get_conversation_template, add_model_args
 
 from config import *
 
-from huggingface_hub import login
-login(token='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')
-
 global max_chars
 global random_text_prompt
 global dan_control
@@ -418,8 +415,8 @@ if __name__ == "__main__":
 
     args.attack = 'GCG'
     # mistral-7b, vicuna-7b (default currently), llama2-7b
-    # mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
+    mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
     # llama2_7b = None
-    # args.model_path = mistral_7b
+    args.model_path = mistral_7b
 
     main(args)
