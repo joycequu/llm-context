@@ -133,6 +133,7 @@ def long_context_response(model, tokenizer, msg, adv_msg, args):
         prompt = conv.get_prompt()
         answer = single_round_response(model, tokenizer, prompt)
         jailbroken = _evaluate_answer(answer)
+        count += 1
         print(f'{jailbroken=}, {count=}')
     # unable to jailbreak
     if count >= 5:
