@@ -81,6 +81,7 @@ def vanilla_response(model, tokenizer, msg, args):
     # Build the prompt with a conversation template
     # msg = f'{args.message} {args.adv_suffix}'
     conv = get_conversation_template(args.model_path)
+    # ADD IN HERE
     conv.append_message(conv.roles[0], msg)
     conv.append_message(conv.roles[1], None)
     prompt = conv.get_prompt()
