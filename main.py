@@ -375,6 +375,9 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
         pbar.set_description(f"[A] {args.attack} [D] {args.defense} [ASR] {asr:.3f}")
         logger.info(f'{len(jailbrokens)}/100 Running ASR: {asr}')
 
+    num_jailbrokens = sum(jailbrokens)
+    num_total = len(jailbrokens)
+    logger.info(f'{num_jailbrokens=}, {num_total=}')
     asr = sum(jailbrokens) / len(jailbrokens)
     logger.info(f'Final ASR: {asr}')
     return asr
