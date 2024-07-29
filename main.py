@@ -15,6 +15,10 @@ from config import *
 
 global max_chars
 global random_text_prompt
+global dan_control
+
+with open('/mnt/align4_drive/joycequ/llm-context/dan_control.txt', 'r') as file:
+    dan_control = file.read()
 
 # need to format this better eventually
 # try 4k, 8k, 16k context, with the long context
@@ -340,16 +344,20 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
         # msg = f'{goal} {dan_prompt}'
         # args.adv_suffix = dan_prompt
 
-        # experiment with GCG first
-        adv_msg = f'{goal} {control}'
         msg = f'{goal}'
-        args.adv_suffix = control
+
+        if args.attack == 'GCG':
+            adv_msg = f'{goal} {control}'
+            args.adv_suffix = control
+        elif args.attack == 'DAN':
+            adv_msg = f'{goal} {dan_control}'
+            args.adv_suffix = dan_control
 
         # need run two rounds
         answer = long_context_response(model, tokenizer, msg, adv_msg, args)
         # wasn't able to jailbreak on the first round, skip over
         if answer is None:
-            pbar.set_description(f"[A] {args.attack} [D] {args.defense} [ASR] Unable to jailbreak on first round")
+            print("Unable to jailbreak on first round")
             continue
 
         jailbrokens.append(_evaluate_answer(answer))
