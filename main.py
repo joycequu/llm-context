@@ -412,4 +412,5 @@ if __name__ == "__main__":
         ])
     logger.info(str(args))
 
+    args.attack = 'GCG'
     main(args)
