@@ -18,6 +18,9 @@ global max_chars
 global random_text_prompt
 global dan_control
 
+from huggingface_hub import login
+login(token='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')
+
 with open('/mnt/align4_drive/joycequ/llm-context/dan_control.txt', 'r') as file:
     dan_control = file.read()
 
@@ -428,8 +431,8 @@ if __name__ == "__main__":
     args.attack = 'DAN'
     # mistral-7b, vicuna-7b (default currently), llama2-7b
     # full_mistral_7b = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
-    # mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
+    mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
     # llama2_7b = None
-    # args.model_path = mistral_7b
+    args.model_path = mistral_7b
 
     main(args)
