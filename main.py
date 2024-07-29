@@ -13,6 +13,9 @@ from fastchat.model import load_model, get_conversation_template, add_model_args
 
 from config import *
 
+from huggingface_hub import login
+login(token='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')
+
 global max_chars
 global random_text_prompt
 global dan_control
@@ -126,6 +129,7 @@ def long_context_response(model, tokenizer, msg, adv_msg, args):
         prompt = conv.get_prompt()
         answer = single_round_response(model, tokenizer, prompt)
         jailbroken = _evaluate_answer(answer)
+        print(f'{jailbroken=}, {count=}')
     # unable to jailbreak
     if count >= 5:
         # raise Exception("Unable to jailbreak on the first round")
@@ -413,4 +417,9 @@ if __name__ == "__main__":
     logger.info(str(args))
 
     args.attack = 'GCG'
+    # mistral-7b, vicuna-7b (default currently), llama2-7b
+    mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
+    llama2_7b = None
+    args.model_path = mistral_7b
+
     main(args)
