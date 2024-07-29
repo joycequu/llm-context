@@ -415,8 +415,9 @@ if __name__ == "__main__":
 
     args.attack = 'GCG'
     # mistral-7b, vicuna-7b (default currently), llama2-7b
-    mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
+    full_mistral_7b = '/mnt/align4_drive/data/huggingface/modules/mistralai/Mistral-7B-Instruct-v0.2'
+    # mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
     # llama2_7b = None
-    args.model_path = mistral_7b
+    args.model_path = full_mistral_7b
 
     main(args)
