@@ -22,8 +22,8 @@ with open('/mnt/align4_drive/joycequ/llm-context/dan_control.txt', 'r') as file:
     dan_control = file.read()
 
 # need to format this better eventually
-# try 4k, 8k, 16k context, with the long context
-max_chars = 8000
+# try 4k, 8k, 12k context, with the long context
+max_chars = 12000
 random_text_prompt = f"Generate some random text of {max_chars} characters"
 
 # local_model_dir = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
