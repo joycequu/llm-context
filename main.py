@@ -45,6 +45,7 @@ def main(args):
     # config = AutoConfig.from_pretrained(local_model_dir)
     # tokenizer = AutoTokenizer.from_pretrained(local_model_dir)
     # model = AutoModel.from_pretrained(local_model_dir, config=config)
+    logger.info(f'{random_text_prompt=}')
     
     data = read_data(args)
     if args.debug:
