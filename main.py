@@ -26,7 +26,7 @@ with open('/mnt/align4_drive/joycequ/llm-context/dan_control.txt', 'r') as file:
 
 # need to format this better eventually
 # try 4k, 8k, 12k context, with the long context
-max_chars = 12000
+max_chars = 4000
 random_text_prompt = f"Generate some random text of {max_chars} characters"
 
 # local_model_dir = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
@@ -428,7 +428,7 @@ if __name__ == "__main__":
         ])
     logger.info(str(args))
 
-    args.attack = 'DAN'
+    args.attack = 'GCG'
     # mistral-7b, vicuna-7b (default currently), llama2-7b
     # full_mistral_7b = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
     mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
