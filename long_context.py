@@ -14,16 +14,35 @@ from transformers import AutoTokenizer, AutoModel, AutoConfig
 
 from config import *
 
-global max_chars
+import pandas as pd
+
 # global random_text_prompt
 global dan_control
+global result_filepath
+global news_txt
+global values_txt
 
 # from huggingface_hub import login
 # login(token='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')
 
+result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr.csv'
+
 def read_file(filepath):
     with open(filepath, 'r') as file:
         return file.read()
+    
+def add_to_csv(args, context_length, first_round, second_round, asr, if_index=False):
+    data = {"Model" : args.model_path, 
+            "Attack Method" : [args.attack],
+            "Long-Context Type" : [args.context],
+            "Long-Context Length": [context_length],
+            "Jailbroken on first round": [first_round],
+            "Jailbroken on second round": [second_round],
+            "ASR": [asr]}
+    df_new = pd.DataFrame(data)
+    df_existing = pd.read_csv(result_filepath)
+    df_combined = pd.concat([df_existing, df_new], ignore_index=if_index)
+    df_combined.to_csv(result_filepath, header=True, index=if_index)
 
 # with open('/mnt/align4_drive/joycequ/llm-context/dan_control.txt', 'r') as file:
 #     dan_control = file.read()
@@ -65,9 +84,8 @@ def main(args):
         
     asr = evaluate_long_context(model, tokenizer, data, args)
 
-
 def read_data(args):
-    import pandas as pd
+    # import pandas as pd
     data = pd.read_csv(args.data)
     targets = data['target'].tolist()[:100]
     if 'goal' in data.columns:
@@ -224,6 +242,10 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
     logger.info(f'{num_jailbrokens=}, {num_total=}')
     asr = sum(jailbrokens) / len(jailbrokens)
     logger.info(f'Final ASR: {asr}')
+
+    add_to_csv(args, context_length, num_total, num_jailbrokens, asr)
+    logger.info("Wrote to CSV %s")
+    
     return asr
 
 if __name__ == "__main__":
