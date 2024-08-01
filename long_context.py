@@ -21,11 +21,13 @@ global dan_control
 global result_filepath
 global news_txt
 global values_txt
+global record_result
 
 # from huggingface_hub import login
 # login(token='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')
 
 result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr.csv'
+record_result = False
 
 def read_file(filepath):
     with open(filepath, 'r') as file:
@@ -242,10 +244,12 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
     logger.info(f'{num_jailbrokens=}, {num_total=}')
     asr = sum(jailbrokens) / len(jailbrokens)
     logger.info(f'Final ASR: {asr}')
-
-    add_to_csv(args, context_length, num_total, num_jailbrokens, asr)
-    logger.info("Wrote to CSV %s")
     
+    if record_result:
+        add_to_csv(args, context_length, num_total, num_jailbrokens, asr)
+
+    logger.info("Wrote to CSV %s")
+
     return asr
 
 if __name__ == "__main__":
@@ -292,7 +296,7 @@ if __name__ == "__main__":
     logger.info(str(args))
 
     args.attack = 'DAN'
-    # args.context = news_txt
+    args.context = 'news'
 
     # mistral-7b, vicuna-7b (default currently), llama2-7b
     # full_mistral_7b = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
