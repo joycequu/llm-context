@@ -26,7 +26,7 @@ global record_result
 # from huggingface_hub import login
 # login(token='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')
 
-result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr.csv'
+result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr_values.csv'
 record_result = True
 
 def read_file(filepath):
