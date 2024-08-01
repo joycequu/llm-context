@@ -15,20 +15,29 @@ from transformers import AutoTokenizer, AutoModel, AutoConfig
 from config import *
 
 global max_chars
-global random_text_prompt
+# global random_text_prompt
 global dan_control
 
 # from huggingface_hub import login
 # login(token='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')
 
-with open('/mnt/align4_drive/joycequ/llm-context/dan_control.txt', 'r') as file:
-    dan_control = file.read()
+def read_file(filepath):
+    with open(filepath, 'r') as file:
+        return file.read()
+
+# with open('/mnt/align4_drive/joycequ/llm-context/dan_control.txt', 'r') as file:
+#     dan_control = file.read()
+
+dan_control = read_file('/mnt/align4_drive/joycequ/llm-context/dan_control.txt')
+news_txt = read_file('/mnt/align4_drive/joycequ/llm-context/random_text/news_txt.txt')
+values_txt = ""
 
 # need to format this better eventually
 # try 4k, 8k, 12k context, with the long context
-max_chars = 12000
-random_text_prompt = f"Generate some random text of {max_chars} characters"
+long_context = True
+context_length = 12000
 
+# random_text_prompt = f"Generate some random text of {max_chars} characters"
 # local_model_dir = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
 
 @torch.inference_mode()
@@ -48,7 +57,7 @@ def main(args):
     # config = AutoConfig.from_pretrained(local_model_dir)
     # tokenizer = AutoTokenizer.from_pretrained(local_model_dir)
     # model = AutoModel.from_pretrained(local_model_dir, config=config)
-    logger.info(f'{random_text_prompt=}')
+    # logger.info(f'{random_text_prompt=}')
 
     data = read_data(args)
     if args.debug:
@@ -115,7 +124,7 @@ def vanilla_response(model, tokenizer, msg, args):
         logger.info(f"Answer: {answer}")
     return answer
 
-def long_context_response(model, tokenizer, msg, adv_msg, args):
+def long_context_response(model, tokenizer, msg, adv_msg, random_txt, args):
     """
     Overview
     - (run, evaluate answer) until jailbroken (set an upperlimit of 10, o.w. raise error/return impossible)
@@ -148,16 +157,17 @@ def long_context_response(model, tokenizer, msg, adv_msg, args):
         logger.info(f"Prompt: {prompt}")
         logger.info(f"Answer: {answer}")
 
-    # add long context (use llm to generate the message)
-    random_text = single_round_response(model, tokenizer, random_text_prompt)
-    conv.append_message(conv.roles[0], random_text)
+    # add long context
+    # random_text = single_round_response(model, tokenizer, random_txt)
+    logger.info("last 20 chars of random txt: ", random_txt[-20:])
+    conv.append_message(conv.roles[1], random_txt) # append context (to agent)
 
     # second round of attack
     conv.append_message(conv.roles[0], msg) # second time, append just msg
     conv.append_message(conv.roles[1], None)
     prompt = conv.get_prompt()
     # import pdb; pdb.set_trace()
-
+    
     answer = single_round_response(model, tokenizer, prompt)
     if args.debug:
         logger.info(f"Prompt: {prompt}")
@@ -365,9 +375,17 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
         elif args.attack == 'DAN':
             adv_msg = f'{goal} {dan_control}'
             args.adv_suffix = dan_control
-
+        
+        if args.context is None:
+            random_txt = ""
+        elif args.context == 'news':
+            random_txt = news_txt[:context_length]
+        elif args.context == 'values':
+            random_txt = values_txt[:context_length]
+        
         # need run two rounds
-        answer = long_context_response(model, tokenizer, msg, adv_msg, args)
+        answer = long_context_response(model, tokenizer, msg, adv_msg, random_txt, args)
+        
         # wasn't able to jailbreak on the first round, skip over
         if answer is None:
             print("Unable to jailbreak on first round")
@@ -408,6 +426,7 @@ if __name__ == "__main__":
     parser.add_argument("--gcg-id", type=int, default=0)
     parser.add_argument("--log", type=str, default='default')
     parser.add_argument("--adv-check", action="store_true")
+    parser.add_argument("--context", type=str, default=None)
     args = parser.parse_args()
 
     # Reset default repetition penalty for T5 models.
@@ -428,11 +447,13 @@ if __name__ == "__main__":
         ])
     logger.info(str(args))
 
-    args.attack = 'GCG'
+    args.attack = 'DAN'
+    # args.context = news_txt
+
     # mistral-7b, vicuna-7b (default currently), llama2-7b
     # full_mistral_7b = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
-    mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
+    # mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
     # llama2_7b = None
-    args.model_path = mistral_7b
+    # args.model_path = mistral_7b
 
     main(args)
