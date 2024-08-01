@@ -27,7 +27,7 @@ global record_result
 # login(token='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')
 
 result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr_values.csv'
-record_result = True
+record_result = False
 
 def read_file(filepath):
     with open(filepath, 'r') as file:
@@ -54,8 +54,7 @@ values_txt = read_file('/mnt/align4_drive/joycequ/llm-context/random_text/values
 
 # need to format this better eventually
 # try 4k, 8k, 12k context, with the long context
-long_context = True
-context_length = 1000
+context_length = 10000
 
 # random_text_prompt = f"Generate some random text of {max_chars} characters"
 # local_model_dir = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
@@ -82,12 +81,17 @@ def main(args):
     data = read_data(args)
     if args.debug:
         logger.info('data loaded')
-        
-    for cur_length in range(1000, 10000, 1000):
-        global context_length
-        context_length = cur_length
-        logger.info(f'{context_length=}')
-        asr = evaluate_long_context(model, tokenizer, data, args)
+    
+    global context_length
+    context_length = 10000
+    logger.info(f'{context_length=}')
+    asr = evaluate_long_context(model, tokenizer, data, args)
+
+    # for cur_length in range(1000, 13000, 1000):
+    #     global context_length
+    #     context_length = cur_length
+    #     logger.info(f'{context_length=}')
+    #     asr = evaluate_long_context(model, tokenizer, data, args)
 
 
 def read_data(args):
@@ -299,7 +303,7 @@ if __name__ == "__main__":
     logger.info(str(args))
 
     args.attack = 'DAN'
-    args.context = 'values'
+    args.context = 'news'
 
     # mistral-7b, vicuna-7b (default currently), llama2-7b
     # full_mistral_7b = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
