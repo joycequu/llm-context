@@ -303,7 +303,7 @@ if __name__ == "__main__":
     logger.info(str(args))
 
     args.attack = 'DAN'
-    args.context = 'news'
+    args.context = 'values'
 
     # mistral-7b, vicuna-7b (default currently), llama2-7b
     # full_mistral_7b = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
