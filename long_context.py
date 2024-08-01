@@ -50,7 +50,7 @@ def add_to_csv(args, context_length, first_round, second_round, asr, if_index=Fa
 
 dan_control = read_file('/mnt/align4_drive/joycequ/llm-context/dan_control.txt')
 news_txt = read_file('/mnt/align4_drive/joycequ/llm-context/random_text/news_txt.txt')
-values_txt = ""
+values_txt = read_file('/mnt/align4_drive/joycequ/llm-context/random_text/values_txt.txt')
 
 # need to format this better eventually
 # try 4k, 8k, 12k context, with the long context
@@ -251,7 +251,7 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
     
     if record_result:
         add_to_csv(args, context_length, num_total, num_jailbrokens, asr)
-        logger.info("Wrote to CSV %s")
+        logger.info("Wrote to CSV")
 
     return asr
 
@@ -299,7 +299,7 @@ if __name__ == "__main__":
     logger.info(str(args))
 
     args.attack = 'DAN'
-    args.context = 'news'
+    args.context = 'values'
 
     # mistral-7b, vicuna-7b (default currently), llama2-7b
     # full_mistral_7b = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
