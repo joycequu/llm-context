@@ -27,16 +27,15 @@ global record_result
 # login(token='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')
 
 result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr.csv'
-record_result = False
+record_result = True
 
 def read_file(filepath):
     with open(filepath, 'r') as file:
         return file.read()
     
 def add_to_csv(args, context_length, first_round, second_round, asr, if_index=False):
-    data = {"Model" : args.model_path, 
-            "Attack Method" : [args.attack],
-            "Long-Context Type" : [args.context],
+    data = {"Attack Type": [args.attack],
+            "Context Type": [args.context],
             "Long-Context Length": [context_length],
             "Jailbroken on first round": [first_round],
             "Jailbroken on second round": [second_round],
@@ -56,7 +55,7 @@ values_txt = ""
 # need to format this better eventually
 # try 4k, 8k, 12k context, with the long context
 long_context = True
-context_length = 4000
+context_length = 1000
 
 # random_text_prompt = f"Generate some random text of {max_chars} characters"
 # local_model_dir = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
@@ -84,7 +83,12 @@ def main(args):
     if args.debug:
         logger.info('data loaded')
         
-    asr = evaluate_long_context(model, tokenizer, data, args)
+    for cur_length in range(1000, 10000, 1000):
+        global context_length
+        context_length = cur_length
+        logger.info(f'{context_length=}')
+        asr = evaluate_long_context(model, tokenizer, data, args)
+
 
 def read_data(args):
     # import pandas as pd
