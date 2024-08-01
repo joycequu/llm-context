@@ -26,7 +26,7 @@ global record_result
 # from huggingface_hub import login
 # login(token='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')
 
-result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr_m_news.csv'
+result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr_m_values.csv'
 record_result = True
 
 def read_file(filepath):
@@ -303,7 +303,7 @@ if __name__ == "__main__":
     logger.info(str(args))
 
     args.attack = 'DAN'
-    args.context = 'news'
+    args.context = 'values'
 
     # mistral-7b, vicuna-7b (default currently), llama2-7b
     # full_mistral_7b = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
