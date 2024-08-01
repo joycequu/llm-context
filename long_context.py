@@ -54,7 +54,7 @@ values_txt = read_file('/mnt/align4_drive/joycequ/llm-context/random_text/values
 
 # need to format this better eventually
 # try 4k, 8k, 12k context, with the long context
-context_length = 1000
+context_length = 5000
 
 # random_text_prompt = f"Generate some random text of {max_chars} characters"
 # local_model_dir = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
