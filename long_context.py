@@ -27,7 +27,7 @@ global record_result
 # login(token='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')
 
 result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr_m_values.csv'
-record_result = True
+record_result = False
 
 def read_file(filepath):
     with open(filepath, 'r') as file:
@@ -85,13 +85,13 @@ def main(args):
     # global context_length
     # context_length = 10000
     # logger.info(f'{context_length=}')
-    # asr = evaluate_long_context(model, tokenizer, data, args)
+    asr = evaluate_long_context(model, tokenizer, data, args)
 
-    for cur_length in range(1000, 13000, 1000):
-        global context_length
-        context_length = cur_length
-        logger.info(f'{context_length=}')
-        asr = evaluate_long_context(model, tokenizer, data, args)
+    # for cur_length in range(1000, 13000, 1000):
+    #     global context_length
+    #     context_length = cur_length
+    #     logger.info(f'{context_length=}')
+    #     asr = evaluate_long_context(model, tokenizer, data, args)
 
 
 def read_data(args):
@@ -303,7 +303,8 @@ if __name__ == "__main__":
     logger.info(str(args))
 
     args.attack = 'DAN'
-    args.context = 'values'
+    # options: 'news', 'values', None
+    args.context = None
 
     # mistral-7b, vicuna-7b (default currently), llama2-7b
     # full_mistral_7b = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
