@@ -26,8 +26,10 @@ global record_result
 # from huggingface_hub import login
 # login(token='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')
 
-# result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr_vicuna_news.csv'
-result_filepath = '/home/gridsan/ywang5/projects/llm-context/long_context_asr_vicuna_news.csv'
+# server_path = '/mnt/align4_drive/joycequ'
+server_path = '/home/gridsan/ywang5/projects'
+
+result_filepath = server_path + '/llm-context/long_context_asr_vicuna_news.csv'
 record_result = False
 
 def read_file(filepath):
@@ -49,9 +51,9 @@ def add_to_csv(args, context_length, first_round, second_round, asr, if_index=Fa
 # with open('/mnt/align4_drive/joycequ/llm-context/dan_control.txt', 'r') as file:
 #     dan_control = file.read()
 
-dan_control = read_file('/mnt/align4_drive/joycequ/llm-context/dan_control.txt')
-news_txt = read_file('/mnt/align4_drive/joycequ/llm-context/random_text/news_txt.txt')
-values_txt = read_file('/mnt/align4_drive/joycequ/llm-context/random_text/values_txt.txt')
+dan_control = read_file(server_path + '/llm-context/dan_control.txt')
+news_txt = read_file(server_path + '/llm-context/random_text/news_txt.txt')
+values_txt = read_file(server_path + '/llm-context/random_text/values_txt.txt')
 
 # need to format this better eventually
 # try 4k, 8k, 12k context, with the long context
