@@ -26,7 +26,8 @@ global record_result
 # from huggingface_hub import login
 # login(token='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')
 
-result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr_m_values.csv'
+# result_filepath = '/mnt/align4_drive/joycequ/llm-context/long_context_asr_vicuna_news.csv'
+result_filepath = '/home/gridsan/ywang5/projects/llm-context/long_context_asr_vicuna_news.csv'
 record_result = False
 
 def read_file(filepath):
@@ -317,5 +318,5 @@ if __name__ == "__main__":
     # llama2_7b = None
     # args.model_path = mistral_7b
     logger.info(f'{args.model_path}')
-    
+
     main(args)
