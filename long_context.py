@@ -87,11 +87,13 @@ def main(args):
     # logger.info(f'{context_length=}')
     asr = evaluate_long_context(model, tokenizer, data, args)
 
-    # for cur_length in range(1000, 13000, 1000):
-    #     global context_length
-    #     context_length = cur_length
-    #     logger.info(f'{context_length=}')
-    #     asr = evaluate_long_context(model, tokenizer, data, args)
+    for cur_length in range(1000, 13000, 1000):
+        # repeat 5 times for each (for mean and std purpose)
+        for _ in range(4):
+            global context_length
+            context_length = cur_length
+            logger.info(f'{context_length=}')
+            asr = evaluate_long_context(model, tokenizer, data, args)
 
 
 def read_data(args):
@@ -302,14 +304,18 @@ if __name__ == "__main__":
         ])
     logger.info(str(args))
 
+    # options: GCG, DAN, AutoDAN (To-be-implemented)
     args.attack = 'DAN'
+    logger.info(f'{args.attack=}')
     # options: 'news', 'values', None
-    args.context = None
+    args.context = 'news'
+    logger.info(f'{args.context=}')
 
-    # mistral-7b, vicuna-7b (default currently), llama2-7b
+    # mistral-7b, vicuna-7b (default), llama2-7b
     # full_mistral_7b = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
-    mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
+    # mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
     # llama2_7b = None
-    args.model_path = mistral_7b
-
+    # args.model_path = mistral_7b
+    logger.info(f'{args.model_path}')
+    
     main(args)
