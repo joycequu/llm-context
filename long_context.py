@@ -6,12 +6,11 @@ python3 -m fastchat.serve.huggingface_api --model lmsys/vicuna-7b-v1.3
 python3 -m fastchat.serve.huggingface_api --model lmsys/fastchat-t5-3b-v1.0
 """
 import os
-os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"
+os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE" # unlock environment for python job
 
-import os
-username = os.getenv("USER")
-os.environ["HF_HOME"] = "/state/partition1/user/"+ username + "/hf"
-os.makedirs(os.getenv("HF_HOME"))
+# username = os.getenv("USER")
+# os.environ["HF_HOME"] = "/state/partition1/user/"+ username + "/hf"
+# os.makedirs(os.getenv("HF_HOME"))
 
 import argparse
 
