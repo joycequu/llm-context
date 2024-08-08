@@ -58,7 +58,7 @@ def read_file(filepath):
     with open(filepath, 'r') as file:
         return file.read()
 
-result_filepath = server_path + '/llm-context/asr_vicuna_news_dan.csv'
+result_filepath = server_path + '/llm-context/asr_vicuna_values_dan.csv'
 dan_control = read_file(server_path + '/llm-context/dan_control.txt')
 news_txt = read_file(server_path + '/llm-context/random_text/news_txt.txt')
 values_txt = read_file(server_path + '/llm-context/random_text/values_txt_v2.txt')
