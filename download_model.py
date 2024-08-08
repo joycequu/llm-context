@@ -1,6 +1,6 @@
-from huggingface_hub import login
-# login(token='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')
-login(token='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')
+# from huggingface_hub import login
+# # login(token='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')
+# login(token='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')
 
 import os
 from transformers import AutoTokenizer, AutoModel
