@@ -37,8 +37,8 @@ global context_length
 # from huggingface_hub import login
 # login(token='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')
 
-# server_path = '/mnt/align4_drive/joycequ'
-server_path = '/home/gridsan/ywang5/projects'
+server_path = '/mnt/align4_drive/joycequ'
+# server_path = '/home/gridsan/ywang5/projects'
 
 result_filepath = server_path + '/llm-context/asr_vicuna_news_gcg.csv'
 record_result = True
