@@ -5,12 +5,15 @@ Usage:
 python3 -m fastchat.serve.huggingface_api --model lmsys/vicuna-7b-v1.3
 python3 -m fastchat.serve.huggingface_api --model lmsys/fastchat-t5-3b-v1.0
 """
-# import os
-# os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE" # unlock environment for python job
-
-# username = os.getenv("USER")
-# os.environ["HF_HOME"] = "/state/partition1/user/"+ username + "/hf"
-# os.makedirs(os.getenv("HF_HOME"))
+import os
+os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE" # unlock environment for python job
+# Hugging Face
+username = os.getenv("USER")
+hf_home = f'/state/partition1/user/{username}/hf'
+os.environ["HF_HOME"] = hf_home
+if not os.path.exists(hf_home):
+    os.makedirs(os.getenv("HF_HOME"))
+print(f"HF_HOME is set to {os.getenv('HF_HOME')}")
 
 import argparse
 
@@ -29,12 +32,13 @@ global result_filepath
 global news_txt
 global values_txt
 global record_result
+global context_length
 
 # from huggingface_hub import login
 # login(token='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')
 
-server_path = '/mnt/align4_drive/joycequ'
-# server_path = '/home/gridsan/ywang5/projects'
+# server_path = '/mnt/align4_drive/joycequ'
+server_path = '/home/gridsan/ywang5/projects'
 
 result_filepath = server_path + '/llm-context/long_context_asr_vicuna_news.csv'
 record_result = False
@@ -95,7 +99,7 @@ def main(args):
     # global context_length
     # context_length = 10000
     # logger.info(f'{context_length=}')
-    asr = evaluate_long_context(model, tokenizer, data, args)
+    # asr = evaluate_long_context(model, tokenizer, data, args)
 
     for cur_length in range(1000, 13000, 1000):
         # repeat 5 times for each (for mean and std purpose)
