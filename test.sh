@@ -1,4 +1,3 @@
-rm -rf $TMPDIR
 export TMPDIR=/state/partition1/user/$USER
 mkdir $TMPDIR
 export TRANSFORMERS_CACHE=/home/gridsan/ywang5/hf/models
