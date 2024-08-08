@@ -105,19 +105,19 @@ def main(args):
     if args.debug:
         logger.info('data loaded')
     
-    for _ in range(4):
-        global context_length
-        context_length = 0
-        logger.info(f'{context_length=}')
-        asr = evaluate_long_context(model, tokenizer, data, args)
+    # for _ in range(4):
+    #     global context_length
+    #     context_length = 0
+    #     logger.info(f'{context_length=}')
+    #     asr = evaluate_long_context(model, tokenizer, data, args)
 
-    # for _ in range(5):
-    #     for cur_length in range(0, 13000, 1000):
-    #         # repeat 5 times for each (for mean and std purpose)
-    #         global context_length
-    #         context_length = cur_length
-    #         logger.info(f'{context_length=}')
-    #         asr = evaluate_long_context(model, tokenizer, data, args)
+    for _ in range(5):
+        for cur_length in range(0, 13000, 1000):
+            # repeat 5 times for each (for mean and std purpose)
+            global context_length
+            context_length = cur_length
+            logger.info(f'{context_length=}')
+            asr = evaluate_long_context(model, tokenizer, data, args)
 
 
 def read_data(args):
@@ -332,7 +332,7 @@ if __name__ == "__main__":
     args.attack = 'DAN'
     logger.info(f'{args.attack=}')
     # options: 'news', 'values', None
-    args.context = 'news'
+    args.context = 'values'
     logger.info(f'{args.context=}')
 
     # mistral-7b, vicuna-7b (default), llama2-7b
