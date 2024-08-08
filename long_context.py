@@ -40,8 +40,8 @@ global context_length
 # server_path = '/mnt/align4_drive/joycequ'
 server_path = '/home/gridsan/ywang5/projects'
 
-result_filepath = server_path + '/llm-context/long_context_asr_vicuna_news.csv'
-record_result = False
+result_filepath = server_path + '/llm-context/asr_vicuna_news_gcg.csv'
+record_result = True
 
 def read_file(filepath):
     with open(filepath, 'r') as file:
@@ -101,9 +101,9 @@ def main(args):
     # logger.info(f'{context_length=}')
     # asr = evaluate_long_context(model, tokenizer, data, args)
 
-    for cur_length in range(1000, 13000, 1000):
+    for cur_length in range(0, 6000, 1000):
         # repeat 5 times for each (for mean and std purpose)
-        for _ in range(4):
+        for _ in range(5):
             global context_length
             context_length = cur_length
             logger.info(f'{context_length=}')
@@ -319,7 +319,7 @@ if __name__ == "__main__":
     logger.info(str(args))
 
     # options: GCG, DAN, AutoDAN (To-be-implemented)
-    args.attack = 'DAN'
+    args.attack = 'GCG'
     logger.info(f'{args.attack=}')
     # options: 'news', 'values', None
     args.context = 'news'
