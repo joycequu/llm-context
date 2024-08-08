@@ -39,27 +39,30 @@ global values_txt
 global record_result
 global context_length
 
-# from huggingface_hub import login
-# login(token='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')
-
-# server_path = '/mnt/align4_drive/joycequ'
+server_path = '/mnt/align4_drive/joycequ'
 # server_path = '/Users/joycequ/Documents/UROP/Context'
-server_path = '/home/gridsan/ywang5/projects'
 
-result_filepath = server_path + '/llm-context/asr_vicuna_news_gcg.csv'
 record_result = True
+superclound = False
 
 def use_softfilelock_in_hf():
     huggingface_hub.utils.WeakFileLock = SoftFileLock
     file_download.WeakFileLock = SoftFileLock
     _local_folder.WeakFileLock = SoftFileLock
 
-use_softfilelock_in_hf()
+if superclound:
+    use_softfilelock_in_hf()
+    server_path = '/home/gridsan/ywang5/projects'
 
 def read_file(filepath):
     with open(filepath, 'r') as file:
         return file.read()
-    
+
+result_filepath = server_path + '/llm-context/asr_vicuna_news_gcg.csv'
+dan_control = read_file(server_path + '/llm-context/dan_control.txt')
+news_txt = read_file(server_path + '/llm-context/random_text/news_txt.txt')
+values_txt = read_file(server_path + '/llm-context/random_text/values_txt_v2.txt')
+
 def add_to_csv(args, context_length, first_round, second_round, asr, if_index=False):
     data = {"Attack Type": [args.attack],
             "Context Type": [args.context],
@@ -71,13 +74,6 @@ def add_to_csv(args, context_length, first_round, second_round, asr, if_index=Fa
     df_existing = pd.read_csv(result_filepath)
     df_combined = pd.concat([df_existing, df_new], ignore_index=if_index)
     df_combined.to_csv(result_filepath, header=True, index=if_index)
-
-# with open('/mnt/align4_drive/joycequ/llm-context/dan_control.txt', 'r') as file:
-#     dan_control = file.read()
-
-dan_control = read_file(server_path + '/llm-context/dan_control.txt')
-news_txt = read_file(server_path + '/llm-context/random_text/news_txt.txt')
-values_txt = read_file(server_path + '/llm-context/random_text/values_txt_v2.txt')
 
 # need to format this better eventually
 # try 4k, 8k, 12k context, with the long context
@@ -109,18 +105,19 @@ def main(args):
     if args.debug:
         logger.info('data loaded')
     
-    # global context_length
-    # context_length = 10000
-    # logger.info(f'{context_length=}')
-    # asr = evaluate_long_context(model, tokenizer, data, args)
+    for _ in range(4):
+        global context_length
+        context_length = 0
+        logger.info(f'{context_length=}')
+        asr = evaluate_long_context(model, tokenizer, data, args)
 
-    for _ in range(5):
-        for cur_length in range(0, 13000, 1000):
-            # repeat 5 times for each (for mean and std purpose)
-            global context_length
-            context_length = cur_length
-            logger.info(f'{context_length=}')
-            asr = evaluate_long_context(model, tokenizer, data, args)
+    # for _ in range(5):
+    #     for cur_length in range(0, 13000, 1000):
+    #         # repeat 5 times for each (for mean and std purpose)
+    #         global context_length
+    #         context_length = cur_length
+    #         logger.info(f'{context_length=}')
+    #         asr = evaluate_long_context(model, tokenizer, data, args)
 
 
 def read_data(args):
@@ -335,7 +332,7 @@ if __name__ == "__main__":
     args.attack = 'DAN'
     logger.info(f'{args.attack=}')
     # options: 'news', 'values', None
-    args.context = 'values'
+    args.context = 'news'
     logger.info(f'{args.context=}')
 
     # mistral-7b, vicuna-7b (default), llama2-7b
