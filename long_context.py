@@ -20,11 +20,16 @@ import argparse
 import torch
 from tqdm import tqdm
 from fastchat.model import load_model, get_conversation_template, add_model_args
-from transformers import AutoTokenizer, AutoModel, AutoConfig
+from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForCausalLM
 
 from config import *
 
 import pandas as pd
+
+from pathlib import Path
+from filelock import SoftFileLock
+import huggingface_hub
+from huggingface_hub import file_download, _local_folder
 
 # global random_text_prompt
 global dan_control
@@ -43,6 +48,13 @@ server_path = '/home/gridsan/ywang5/projects'
 
 result_filepath = server_path + '/llm-context/asr_vicuna_news_gcg.csv'
 record_result = True
+
+def use_softfilelock_in_hf():
+    huggingface_hub.utils.WeakFileLock = SoftFileLock
+    file_download.WeakFileLock = SoftFileLock
+    _local_folder.WeakFileLock = SoftFileLock
+
+use_softfilelock_in_hf()
 
 def read_file(filepath):
     with open(filepath, 'r') as file:
