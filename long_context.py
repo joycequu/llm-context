@@ -71,7 +71,7 @@ for l in range(0, 9000, 1000):
     if l == 0:
         values_txt_dict[0] = "" # empty, no long context
     else:
-        filename = server_path + '/llm-context/random_text/' + str(l) + '.txt'
+        filename = server_path + '/llm-context/random_text_' + str(l) + '.txt'
         values_txt_dict[l] = read_file(filename)
 
 # append new results to csv
