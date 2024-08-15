@@ -35,7 +35,7 @@ model_path = "/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3" # manually download
 
 # Toggle
 record_result = True
-supercloud = False
+supercloud = True
 
 server_path = '/mnt/align4_drive/joycequ'
 # server_path = '/Users/joycequ/Documents/UROP/Context'
