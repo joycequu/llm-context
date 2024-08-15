@@ -99,16 +99,18 @@ context_length = 0
 @torch.inference_mode()
 def main(args):
     # Load model
-    model, tokenizer = load_model(
-        args.model_path,
-        device=args.device,
-        num_gpus=args.num_gpus,
-        max_gpu_memory=args.max_gpu_memory,
-        load_8bit=args.load_8bit,
-        cpu_offloading=args.cpu_offloading,
-        revision=args.revision,
-        debug=args.debug,
-    )
+    tokenizer = AutoTokenizer.from_pretrained(model_path)
+    model = AutoModel.from_pretrained(model_path)
+    # model, tokenizer = load_model(
+    #     args.model_path,
+    #     device=args.device,
+    #     num_gpus=args.num_gpus,
+    #     max_gpu_memory=args.max_gpu_memory,
+    #     load_8bit=args.load_8bit,
+    #     cpu_offloading=args.cpu_offloading,
+    #     revision=args.revision,
+    #     debug=args.debug,
+    # )
 
     # tokenizer = AutoTokenizer.from_pretrained(args.model_path, revision=args.revision)
     # model = AutoModelForCausalLM.from_pretrained(args.model_path, revision=args.revision)
