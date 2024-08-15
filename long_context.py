@@ -21,6 +21,7 @@ from pathlib import Path
 from filelock import SoftFileLock
 import huggingface_hub
 from huggingface_hub import file_download, _local_folder
+import json
 
 # global random_text_prompt
 global dan_control
@@ -30,13 +31,14 @@ global values_txt
 global record_result
 global context_length
 
-model_path = "/home/gridsan/ywang5/hf/models/models--lmsys--vicuna-7b-v1.3"
+model_path = "/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3" # manually downloaded model
+
+# Toggle
+record_result = True
+superclound = True
 
 server_path = '/mnt/align4_drive/joycequ'
 # server_path = '/Users/joycequ/Documents/UROP/Context'
-
-record_result = True
-superclound = False
 
 # resolve lock issue
 def use_softfilelock_in_hf():
@@ -47,6 +49,12 @@ def use_softfilelock_in_hf():
 if superclound:
     use_softfilelock_in_hf()
     server_path = '/home/gridsan/ywang5/projects'
+
+# manually load artifact from local
+artifact_path = server_path + "/artifacts/attack-artifacts/GCG/white_box/vicuna-13b-v1.5.json"
+with open(artifact_path, 'r') as file:
+    artifact = json.load(file)
+jailbreak_info = artifact.get('jailbreaks', [])
 
 def read_file(filepath):
     with open(filepath, 'r') as file:
@@ -99,6 +107,9 @@ def main(args):
         revision=args.revision,
         debug=args.debug,
     )
+
+    # tokenizer = AutoTokenizer.from_pretrained(args.model_path, revision=args.revision)
+    # model = AutoModelForCausalLM.from_pretrained(args.model_path, revision=args.revision)
 
     # config = AutoConfig.from_pretrained(local_model_dir)
     # tokenizer = AutoTokenizer.from_pretrained(local_model_dir)
@@ -249,7 +260,7 @@ def long_context_response_artifacts(model, tokenizer, jailbreak_info, random_txt
 
     # first round of attack - any jailbreak_info passed in is already jailbroken
     conv = get_conversation_template(args.model_path)
-    conv.append_message(conv.roles[0], jailbreak_info.prompt) # first time, append adv_msg
+    conv.append_message(conv.roles[0], jailbreak_info["prompt"]) # first time, append adv_msg
     conv.append_message(conv.roles[1], None)
     prompt = conv.get_prompt()
     answer = single_round_response(model, tokenizer, prompt)
@@ -264,7 +275,7 @@ def long_context_response_artifacts(model, tokenizer, jailbreak_info, random_txt
     conv.append_message(conv.roles[1], random_txt) # append long context (to agent)
 
     # second round of attack
-    conv.append_message(conv.roles[0], jailbreak_info.goal) # second time, append just msg
+    conv.append_message(conv.roles[0], jailbreak_info["goal"]) # second time, append just msg
     conv.append_message(conv.roles[1], None)
     prompt = conv.get_prompt()
     # import pdb; pdb.set_trace()
@@ -281,11 +292,11 @@ def _evaluate_answer(answer):
     return jailbroken
 
 def evaluate_long_context_artifact(model, tokenizer, harmful_data, args):
-    logger.info("Setting up artifact...")
-    artifact = jbb.read_artifact(
-        method=args.attack, # PAIR is a jailbreaking method
-        model_name="vicuna-13b-v1.5"
-    )
+    # logger.info("Setting up artifact...")
+    # artifact = jbb.read_artifact(
+    #     method=args.attack, # PAIR is a jailbreaking method
+    #     model_name="vicuna-13b-v1.5"
+    # )
     # models = ['vicuna-13b-v1.5', 'llama-2-7b-chat-hf', 'gpt-3.5-turbo-1106', 'gpt-4-0125-preview']
     # defense method
     if args.context is None:
@@ -298,9 +309,8 @@ def evaluate_long_context_artifact(model, tokenizer, harmful_data, args):
     jailbrokens = []
     pbar = tqdm(harmful_data)
     for i in range(0, 99):
-        jailbreak_info = artifact.jailbreaks[i]
         if jailbreak_info.jailbroken:
-            answer = long_context_response_artifacts(model, tokenizer, jailbreak_info, random_txt, args)
+            answer = long_context_response_artifacts(model, tokenizer, jailbreak_info[i], random_txt, args)
             jailbrokens.append(_evaluate_answer(answer))
             asr = sum(jailbrokens) * 100 / len(jailbrokens)
             pbar.set_description(f"[A] {args.attack} [D] {args.defense} [ASR] {asr:.3f}")
@@ -372,6 +382,7 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     add_model_args(parser)
+    parser.add_argument('--model_path', type=str, required=True)
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--repetition_penalty", type=float, default=1.0)
     parser.add_argument("--max-new-tokens", type=int, default=512)
@@ -420,11 +431,7 @@ if __name__ == "__main__":
     logger.info(f'{args.context=}')
 
     # mistral-7b, vicuna-7b (default), llama2-7b
-    # full_mistral_7b = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
-    # mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
-    # llama2_7b = None
-    # args.model_path = mistral_7b
-    # args.model_path = model_path
-    # logger.info(f'{args.model_path}')
+    args.model_path = model_path
+    logger.info(f'{args.model_path}')
 
     main(args)
