@@ -35,7 +35,7 @@ model_path = "/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3" # manually download
 
 # Toggle
 record_result = True
-superclound = True
+supercloud = False
 
 server_path = '/mnt/align4_drive/joycequ'
 # server_path = '/Users/joycequ/Documents/UROP/Context'
@@ -46,7 +46,7 @@ def use_softfilelock_in_hf():
     file_download.WeakFileLock = SoftFileLock
     _local_folder.WeakFileLock = SoftFileLock
 
-if superclound:
+if supercloud:
     use_softfilelock_in_hf()
     server_path = '/home/gridsan/ywang5/projects'
 
@@ -382,7 +382,8 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     add_model_args(parser)
-    parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3")
+    if supercloud:
+        parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3")
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--repetition_penalty", type=float, default=1.0)
     parser.add_argument("--max-new-tokens", type=int, default=512)
@@ -431,7 +432,7 @@ if __name__ == "__main__":
     logger.info(f'{args.context=}')
 
     # mistral-7b, vicuna-7b (default), llama2-7b
-    args.model_path = model_path
-    logger.info(f'{args.model_path}')
+    # args.model_path = model_path
+    # logger.info(f'{args.model_path}')
 
     main(args)
