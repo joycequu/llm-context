@@ -46,7 +46,11 @@ if supercloud:
 # server_path = '/Users/joycequ/Documents/UROP/Context'
 
 # manually load artifact from local
-artifact_path = server_path + "/artifacts/attack-artifacts/GCG/white_box/vicuna-13b-v1.5.json"
+attack_path_dict = {'JCB' : "JBC/manual/vicuna-13b-v1.5.json",
+                    'GCG' : "GCG/white_box/vicuna-13b-v1.5.json"}
+
+artifact_path = server_path + "/artifacts/attack-artifacts/" + attack_path_dict['JCB']
+
 with open(artifact_path, 'r') as file:
     artifact = json.load(file)
 jailbreak_info = artifact.get('jailbreaks', [])
@@ -56,7 +60,7 @@ def read_file(filepath):
         return file.read()
 
 # set model paths
-result_filepath = server_path + '/llm-context/asr_vicuna_values_dan_2.csv'
+result_filepath = server_path + '/llm-context/asr_vicuna_news_jcb_artifacts.csv'
 dan_control = read_file(server_path + '/llm-context/dan_control.txt')
 news_txt = read_file(server_path + '/llm-context/random_text/news_txt.txt')
 # values_txt = read_file(server_path + '/llm-context/random_text/values_txt_v2.txt')
@@ -421,10 +425,10 @@ if __name__ == "__main__":
     logger.info(str(args))
 
     # options: GCG, DAN, AutoDAN (To-be-implemented)
-    args.attack = 'GCG'
+    args.attack = 'JCB'
     logger.info(f'{args.attack=}')
     # options: 'news', 'values', None
-    args.context = 'values'
+    args.context = 'news'
     logger.info(f'{args.context=}')
 
     # mistral-7b, vicuna-7b (default), llama2-7b
