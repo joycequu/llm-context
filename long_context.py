@@ -424,7 +424,7 @@ if __name__ == "__main__":
     # mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
     # llama2_7b = None
     # args.model_path = mistral_7b
-    args.model_path = model_path
-    logger.info(f'{args.model_path}')
+    # args.model_path = model_path
+    # logger.info(f'{args.model_path}')
 
     main(args)
