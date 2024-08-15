@@ -6,17 +6,12 @@ python3 -m fastchat.serve.huggingface_api --model wg
 python3 -m fastchat.serve.huggingface_api --model lmsys/fastchat-t5-3b-v1.0
 """
 import argparse
-
 import torch
 from tqdm import tqdm
 from fastchat.model import load_model, get_conversation_template, add_model_args
 from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForCausalLM
-
 from config import *
-
 import pandas as pd
-# import jailbreakbench as jbb # jailbreakbench for artifacts
-
 from pathlib import Path
 from filelock import SoftFileLock
 import huggingface_hub
@@ -32,15 +27,12 @@ global values_txt
 global record_result
 global context_length
 
-os.environ["TRANSFORMERS_OFFLINE"] = "1" # running offline
-model_path = "/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3" # manually downloaded model
-
-# Toggle
 record_result = True
 supercloud = True
 
+os.environ["TRANSFORMERS_OFFLINE"] = "1" # running offline
+model_path = "/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3" # manually downloaded model
 server_path = '/mnt/align4_drive/joycequ'
-# server_path = '/Users/joycequ/Documents/UROP/Context'
 
 # resolve lock issue
 def use_softfilelock_in_hf():
@@ -51,6 +43,7 @@ def use_softfilelock_in_hf():
 if supercloud:
     use_softfilelock_in_hf()
     server_path = '/home/gridsan/ywang5/projects'
+# server_path = '/Users/joycequ/Documents/UROP/Context'
 
 # manually load artifact from local
 artifact_path = server_path + "/artifacts/attack-artifacts/GCG/white_box/vicuna-13b-v1.5.json"
@@ -310,7 +303,7 @@ def evaluate_long_context_artifact(model, tokenizer, harmful_data, args):
     jailbrokens = []
     pbar = tqdm(harmful_data)
     for i in range(0, 99):
-        if jailbreak_info.jailbroken:
+        if jailbreak_info['jailbroken']:
             answer = long_context_response_artifacts(model, tokenizer, jailbreak_info[i], random_txt, args)
             jailbrokens.append(_evaluate_answer(answer))
             asr = sum(jailbrokens) * 100 / len(jailbrokens)
@@ -383,8 +376,8 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     add_model_args(parser)
-    if supercloud:
-        parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3")
+    # if supercloud:
+    #     parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3")
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--repetition_penalty", type=float, default=1.0)
     parser.add_argument("--max-new-tokens", type=int, default=512)
