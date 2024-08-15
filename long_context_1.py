@@ -56,13 +56,13 @@ def read_file(filepath):
         return file.read()
 
 # set model paths
-result_filepath = server_path + '/llm-context/asr_vicuna_values_gcg_artifacts.csv'
+result_filepath = server_path + '/llm-context/asr_vicuna_values_dan_2.csv'
 dan_control = read_file(server_path + '/llm-context/dan_control.txt')
 news_txt = read_file(server_path + '/llm-context/random_text/news_txt.txt')
 # values_txt = read_file(server_path + '/llm-context/random_text/values_txt_v2.txt')
 
 values_txt_dict = {}
-for l in range(0, 6000, 1000):
+for l in range(0, 9000, 1000):
     if l == 0:
         values_txt_dict[0] = "" # empty, no long context
     else:
@@ -123,7 +123,7 @@ def main(args):
     #     asr = evaluate_long_context_artifact(model, tokenizer, data, args)
 
     for _ in range(5):
-        for cur_length in range(0, 6000, 1000):
+        for cur_length in range(1000, 9000, 1000):
             # repeat 5 times for each (for mean and std purpose)
             global context_length
             context_length = cur_length
