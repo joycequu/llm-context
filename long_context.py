@@ -5,16 +5,6 @@ Usage:
 python3 -m fastchat.serve.huggingface_api --model wg
 python3 -m fastchat.serve.huggingface_api --model lmsys/fastchat-t5-3b-v1.0
 """
-# import os
-# os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE" # unlock environment for python job
-# Hugging Face
-# username = os.getenv("USER")
-# hf_home = f'/state/partition1/user/{username}/hf'
-# os.environ["HF_HOME"] = hf_home
-# if not os.path.exists(hf_home):
-#     os.makedirs(os.getenv("HF_HOME"))
-# print(f"HF_HOME is set to {os.getenv('HF_HOME')}")
-
 import argparse
 
 import torch
@@ -39,6 +29,8 @@ global news_txt
 global values_txt
 global record_result
 global context_length
+
+model_path = "/home/gridsan/ywang5/hf/models/models--lmsys--vicuna-7b-v1.3"
 
 server_path = '/mnt/align4_drive/joycequ'
 # server_path = '/Users/joycequ/Documents/UROP/Context'
@@ -380,6 +372,7 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     add_model_args(parser)
+    parser.add_argument("--model_path", type=str, required=True, help=model_path)
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--repetition_penalty", type=float, default=1.0)
     parser.add_argument("--max-new-tokens", type=int, default=512)
