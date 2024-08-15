@@ -18,6 +18,6 @@ with open(artifact_path, 'r') as file:
 jailbreak_info = artifact.get('jailbreaks', [])
 # print(jailbreak_info[75])
 
-print(jailbreak_info[75])
+print(len(jailbreak_info))
 
 # models = ['vicuna-13b-v1.5', 'llama-2-7b-chat-hf', 'gpt-3.5-turbo-1106', 'gpt-4-0125-preview']
