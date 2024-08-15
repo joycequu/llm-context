@@ -372,7 +372,6 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     add_model_args(parser)
-    parser.add_argument("--model_path", type=str, required=True, help=model_path)
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--repetition_penalty", type=float, default=1.0)
     parser.add_argument("--max-new-tokens", type=int, default=512)
@@ -425,6 +424,7 @@ if __name__ == "__main__":
     # mistral_7b = 'mistralai/Mistral-7B-Instruct-v0.2'
     # llama2_7b = None
     # args.model_path = mistral_7b
+    args.model_path = model_path
     logger.info(f'{args.model_path}')
 
     main(args)
