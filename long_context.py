@@ -15,7 +15,7 @@ from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForCausa
 from config import *
 
 import pandas as pd
-import jailbreakbench as jbb # jailbreakbench for artifcats
+# import jailbreakbench as jbb # jailbreakbench for artifacts
 
 from pathlib import Path
 from filelock import SoftFileLock
