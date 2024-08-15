@@ -376,8 +376,8 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     add_model_args(parser)
-    # if supercloud:
-    #     parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3")
+    if supercloud:
+        parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3")
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--repetition_penalty", type=float, default=1.0)
     parser.add_argument("--max-new-tokens", type=int, default=512)
