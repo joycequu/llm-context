@@ -2,7 +2,7 @@
 Use FastChat to evaluate  with Hugging Face generation APIs.
 
 Usage:
-python3 -m fastchat.serve.huggingface_api --model lmsys/vicuna-7b-v1.3
+python3 -m fastchat.serve.huggingface_api --model wg
 python3 -m fastchat.serve.huggingface_api --model lmsys/fastchat-t5-3b-v1.0
 """
 # import os
@@ -25,6 +25,7 @@ from transformers import AutoTokenizer, AutoModel, AutoConfig, AutoModelForCausa
 from config import *
 
 import pandas as pd
+import jailbreakbench as jbb # jailbreakbench for artifcats
 
 from pathlib import Path
 from filelock import SoftFileLock
@@ -45,6 +46,7 @@ server_path = '/mnt/align4_drive/joycequ'
 record_result = True
 superclound = False
 
+# resolve lock issue
 def use_softfilelock_in_hf():
     huggingface_hub.utils.WeakFileLock = SoftFileLock
     file_download.WeakFileLock = SoftFileLock
@@ -58,11 +60,21 @@ def read_file(filepath):
     with open(filepath, 'r') as file:
         return file.read()
 
-result_filepath = server_path + '/llm-context/asr_vicuna_values_dan.csv'
+# set model paths
+result_filepath = server_path + '/llm-context/asr_vicuna_values_dan_2.csv'
 dan_control = read_file(server_path + '/llm-context/dan_control.txt')
 news_txt = read_file(server_path + '/llm-context/random_text/news_txt.txt')
-values_txt = read_file(server_path + '/llm-context/random_text/values_txt_v2.txt')
+# values_txt = read_file(server_path + '/llm-context/random_text/values_txt_v2.txt')
 
+values_txt_dict = {}
+for l in range(0, 9000, 1000):
+    if l == 0:
+        values_txt_dict[0] = "" # empty, no long context
+    else:
+        filename = server_path + '/llm-context/random_text/' + str(l) + '.txt'
+        values_txt_dict[l] = read_file(filename)
+
+# append new results to csv
 def add_to_csv(args, context_length, first_round, second_round, asr, if_index=False):
     data = {"Attack Type": [args.attack],
             "Context Type": [args.context],
@@ -79,7 +91,7 @@ def add_to_csv(args, context_length, first_round, second_round, asr, if_index=Fa
 # try 4k, 8k, 12k context, with the long context
 context_length = 0
 
-# random_text_prompt = f"Generate some random text of {max_chars} characters"
+# random_text_prompt = f"Generate some random text of {max_chars} characters" # inefficient
 # local_model_dir = '/mnt/align4_drive/data/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2'
 
 @torch.inference_mode()
@@ -105,19 +117,21 @@ def main(args):
     if args.debug:
         logger.info('data loaded')
     
-    # for _ in range(4):
-    #     global context_length
-    #     context_length = 0
-    #     logger.info(f'{context_length=}')
-    #     asr = evaluate_long_context(model, tokenizer, data, args)
-
     for _ in range(5):
-        for cur_length in range(0, 13000, 1000):
-            # repeat 5 times for each (for mean and std purpose)
-            global context_length
-            context_length = cur_length
-            logger.info(f'{context_length=}')
-            asr = evaluate_long_context(model, tokenizer, data, args)
+        global context_length
+        context_length = 0
+        logger.info(f'{context_length=}')
+        # asr = evaluate_long_context(model, tokenizer, data, args)
+        asr = evaluate_long_context_artifact(model, tokenizer, data, args)
+
+    # for _ in range(5):
+    #     for cur_length in range(0, 13000, 1000):
+    #         # repeat 5 times for each (for mean and std purpose)
+    #         global context_length
+    #         context_length = cur_length
+    #         logger.info(f'{context_length=}')
+    #         # asr = evaluate_long_context(model, tokenizer, data, args)
+    #         asr = evaluate_long_context_artifact(model, tokenizer, data, args)
 
 
 def read_data(args):
@@ -229,11 +243,89 @@ def long_context_response(model, tokenizer, msg, adv_msg, random_txt, args):
 
     return answer
 
+def long_context_response_artifacts(model, tokenizer, jailbreak_info, random_txt, args):
+    """
+    Overview
+    - (run, evaluate answer) until jailbroken (set an upperlimit of 10, o.w. raise error/return impossible)
+    - long context
+    - run, return answer
+    """
+    # Build the prompt with a conversation template
+    # msg = f'{args.message} {args.adv_suffix}'
+    # roles[0] - user, msg - question
+    # roles[1] - assistant, msg - none
+
+    # first round of attack - any jailbreak_info passed in is already jailbroken
+    conv = get_conversation_template(args.model_path)
+    conv.append_message(conv.roles[0], jailbreak_info.prompt) # first time, append adv_msg
+    conv.append_message(conv.roles[1], None)
+    prompt = conv.get_prompt()
+    answer = single_round_response(model, tokenizer, prompt)
+
+    if args.debug: # only log when successful
+        logger.info(f"Prompt: {prompt}")
+        logger.info(f"Answer: {answer}")
+
+    # add long context
+    # random_text = single_round_response(model, tokenizer, random_txt)
+    logger.info("last 20 chars of random txt: %s", random_txt[-20:])
+    conv.append_message(conv.roles[1], random_txt) # append long context (to agent)
+
+    # second round of attack
+    conv.append_message(conv.roles[0], jailbreak_info.goal) # second time, append just msg
+    conv.append_message(conv.roles[1], None)
+    prompt = conv.get_prompt()
+    # import pdb; pdb.set_trace()
+    
+    answer = single_round_response(model, tokenizer, prompt)
+    if args.debug:
+        logger.info(f"Prompt: {prompt}")
+        logger.info(f"Answer: {answer}")
+
+    return answer
 
 def _evaluate_answer(answer):
     jailbroken = not any([prefix in answer for prefix in TEST_PREFIXES])
     return jailbroken
 
+def evaluate_long_context_artifact(model, tokenizer, harmful_data, args):
+    logger.info("Setting up artifact...")
+    artifact = jbb.read_artifact(
+        method=args.attack, # PAIR is a jailbreaking method
+        model_name="vicuna-13b-v1.5"
+    )
+    # models = ['vicuna-13b-v1.5', 'llama-2-7b-chat-hf', 'gpt-3.5-turbo-1106', 'gpt-4-0125-preview']
+    # defense method
+    if args.context is None:
+        random_txt = ""
+    elif args.context == 'news':
+        random_txt = news_txt[:context_length]
+    elif args.context == 'values':
+        random_txt = values_txt_dict[context_length]
+
+    jailbrokens = []
+    pbar = tqdm(harmful_data)
+    for i in range(0, 99):
+        jailbreak_info = artifact.jailbreaks[i]
+        if jailbreak_info.jailbroken:
+            answer = long_context_response_artifacts(model, tokenizer, jailbreak_info, random_txt, args)
+            jailbrokens.append(_evaluate_answer(answer))
+            asr = sum(jailbrokens) * 100 / len(jailbrokens)
+            pbar.set_description(f"[A] {args.attack} [D] {args.defense} [ASR] {asr:.3f}")
+            logger.info(f'{len(jailbrokens)}/100 Running ASR: {asr}')
+
+    num_jailbrokens = sum(jailbrokens)
+    num_total = len(jailbrokens)
+    logger.info(f'{num_jailbrokens=}, {num_total=}')
+    asr = sum(jailbrokens) / len(jailbrokens)
+    logger.info(f'Final ASR: {asr}')
+
+    if record_result:
+        add_to_csv(args, context_length, num_total, num_jailbrokens, asr)
+        logger.info("Wrote to CSV")
+
+    return asr
+        
 # test function for long_context (temporary) - DAN attack
 def evaluate_long_context(model, tokenizer, harmful_data, args):
     jailbrokens = []
@@ -257,15 +349,15 @@ def evaluate_long_context(model, tokenizer, harmful_data, args):
         elif args.context == 'news':
             random_txt = news_txt[:context_length]
         elif args.context == 'values':
-            random_txt = values_txt[:context_length]
+            random_txt = values_txt_dict[context_length] # updated values_txt
         
         # need run two rounds
         answer = long_context_response(model, tokenizer, msg, adv_msg, random_txt, args)
         
         # wasn't able to jailbreak on the first round, skip over
-        if answer is None:
-            print("Unable to jailbreak on first round")
-            continue
+        # if answer is None:
+        #     print("Unable to jailbreak on first round")
+        #     continue
         # jailbroken on first round
         jailbrokens.append(_evaluate_answer(answer))
 
