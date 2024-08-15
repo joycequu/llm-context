@@ -44,7 +44,7 @@ server_path = '/mnt/align4_drive/joycequ'
 # server_path = '/Users/joycequ/Documents/UROP/Context'
 
 record_result = True
-superclound = False
+superclound = True
 
 # resolve lock issue
 def use_softfilelock_in_hf():
