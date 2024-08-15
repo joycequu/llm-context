@@ -127,7 +127,7 @@ def main(args):
     #     asr = evaluate_long_context_artifact(model, tokenizer, data, args)
 
     for _ in range(5):
-        for cur_length in range(1000, 9000, 1000):
+        for cur_length in range(0, 6000, 1000):
             # repeat 5 times for each (for mean and std purpose)
             global context_length
             context_length = cur_length
