@@ -303,7 +303,7 @@ def evaluate_long_context_artifact(model, tokenizer, harmful_data, args):
     jailbrokens = []
     pbar = tqdm(harmful_data)
     for i in range(0, 99):
-        if jailbreak_info['jailbroken']:
+        if jailbreak_info[i]['jailbroken']:
             answer = long_context_response_artifacts(model, tokenizer, jailbreak_info[i], random_txt, args)
             jailbrokens.append(_evaluate_answer(answer))
             asr = sum(jailbrokens) * 100 / len(jailbrokens)
