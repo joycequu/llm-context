@@ -22,6 +22,7 @@ from filelock import SoftFileLock
 import huggingface_hub
 from huggingface_hub import file_download, _local_folder
 import json
+import os
 
 # global random_text_prompt
 global dan_control
@@ -31,6 +32,7 @@ global values_txt
 global record_result
 global context_length
 
+os.environ["TRANSFORMERS_OFFLINE"] = "1" # running offline
 model_path = "/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3" # manually downloaded model
 
 # Toggle
