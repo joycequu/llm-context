@@ -36,7 +36,7 @@ server_path = '/mnt/align4_drive/joycequ'
 # server_path = '/Users/joycequ/Documents/UROP/Context'
 
 record_result = True
-superclound = True
+superclound = False
 
 # resolve lock issue
 def use_softfilelock_in_hf():
@@ -413,7 +413,7 @@ if __name__ == "__main__":
     logger.info(str(args))
 
     # options: GCG, DAN, AutoDAN (To-be-implemented)
-    args.attack = 'DAN'
+    args.attack = 'GCG'
     logger.info(f'{args.attack=}')
     # options: 'news', 'values', None
     args.context = 'values'
