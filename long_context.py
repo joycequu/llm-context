@@ -73,7 +73,7 @@ for l in range(0, 9000, 1000):
     if l == 0:
         values_txt_dict[0] = "" # empty, no long context
     else:
-        filename = server_path + '/llm-context/random_text/values_txt_' + str(l) + '.txt'
+        filename = server_path + f'/llm-context/random_text/values_txt_{l}.txt'
         values_txt_dict[l] = read_file(filename)
 
 # append new results to csv
@@ -99,18 +99,16 @@ context_length = 0
 @torch.inference_mode()
 def main(args):
     # Load model
-    tokenizer = AutoTokenizer.from_pretrained(model_path)
-    model = AutoModel.from_pretrained(model_path)
-    # model, tokenizer = load_model(
-    #     args.model_path,
-    #     device=args.device,
-    #     num_gpus=args.num_gpus,
-    #     max_gpu_memory=args.max_gpu_memory,
-    #     load_8bit=args.load_8bit,
-    #     cpu_offloading=args.cpu_offloading,
-    #     revision=args.revision,
-    #     debug=args.debug,
-    # )
+    model, tokenizer = load_model(
+        args.model_path,
+        device=args.device,
+        num_gpus=args.num_gpus,
+        max_gpu_memory=args.max_gpu_memory,
+        load_8bit=args.load_8bit,
+        cpu_offloading=args.cpu_offloading,
+        revision=args.revision,
+        debug=args.debug,
+    )
 
     # tokenizer = AutoTokenizer.from_pretrained(args.model_path, revision=args.revision)
     # model = AutoModelForCausalLM.from_pretrained(args.model_path, revision=args.revision)
@@ -139,7 +137,6 @@ def main(args):
     #         logger.info(f'{context_length=}')
     #         # asr = evaluate_long_context(model, tokenizer, data, args)
     #         asr = evaluate_long_context_artifact(model, tokenizer, data, args)
-
 
 def read_data(args):
     # import pandas as pd
