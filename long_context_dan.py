@@ -220,7 +220,7 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
         
         answer = long_context_response(model, tokenizer, msg, random_txt, args)
         answers.append(answer)
-        logger.info(f'{answer=}')
+        
         if args.prompt_type == 'harmful':
             if_jailbroken = _evaluate_answer(answer)
             logger.info(f'{if_jailbroken=}')
