@@ -40,7 +40,7 @@ def read_file(filepath):
 
 # set model paths
 general_dan_control = read_file('dan/general_dan.txt')
-num_prompts = 10 # normally 100, 20 for trial purpose
+num_prompts = 5 # normally 100, 20 for trial purpose
 
 # long_context_types definition
 news_txt = read_file('random_text/news_txt.txt')
@@ -175,10 +175,12 @@ def vanilla_response(model, tokenizer, msg, args):
 
 def long_context_response(model, tokenizer, msg, random_txt, args):
     """
-    Overview
-    - (run, evaluate answer) until jailbroken (set an upperlimit of 10, o.w. raise error/return impossible)
-    - long context
-    - run, return answer
+    Overview:
+    - Add adversarial suffix (e.g. DAN) to user
+    - Get answer from model
+    - Add long-context random text to agent
+    - Add goal to user
+    - Get answer from model
     """
     # Build the prompt with a conversation template
     # msg = f'{args.message} {args.adv_suffix}'
@@ -194,13 +196,14 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
     logger.info(f"Prompt with DAN control: {prompt}")
     logger.info(f"Answer with DAN control: {answer}")
 
-    conv = get_conversation_template(args.model_path) # ?
-    # add long context to agent
-    logger.info("last 20 chars of random txt: %s", random_txt[-20:])
-    conv.append_message(conv.roles[1], random_txt)
-
-    # add the goal to user
-    conv.append_message(conv.roles[0], msg)
+    conv.messages.pop()
+    conv.append(conv.roles[1], answer)
+    conv.append_message(conv.roles[0], msg) # msg = goal
+    if context_length == 0:
+        conv.append_message(conv.roles[1], None)
+    else:
+        logger.info("last 20 chars of random txt: %s", random_txt[-20:])
+        conv.append_messages(conv.roles[1], random_txt)
     prompt = conv.get_prompt()
     answer = single_round_response(model, tokenizer, prompt)
 
@@ -216,19 +219,20 @@ def _evaluate_answer(answer):
 # test function for long_context (temporary) - DAN attack
 def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add another parameter: if_harmful
     # set up for writing to csv
-    question_ids = []
-    categories = []
-    goals = []
-    answers = []
+    # question_ids = []
+    # categories = []
+    # goals = []
+    # answers = []
     jailbrokens = []
+    answer_filepath = 'answer_vicuna_' + args.attack + '_' + args.prompt_type + '.json'
     
     # removing pbar here temporarily
     for question_id, category, goal in prompts_data:
         logger.info(f'{question_id=}, {category=}, {goal=}')
         # update csv
-        question_ids.append(question_id)
-        categories.append(category)
-        goals.append(goal)
+        # question_ids.append(question_id)
+        # categories.append(category)
+        # goals.append(goal)
 
         msg = f'{goal}'
         # attack method (note: reformatted compared to main.py)
@@ -246,26 +250,36 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
             random_txt = values_txt_dict[context_length] # updated values_txt
         
         answer = long_context_response(model, tokenizer, msg, random_txt, args)
-        answers.append(answer)
+        # answers.append(answer)
         if args.prompt_type == 'harmful':
             if_jailbroken = _evaluate_answer(answer)
             logger.info(f'{if_jailbroken=}')
-            jailbrokens.append(if_jailbroken)
         else:
-            jailbrokens.append(None)
+            if_jailbroken = None
+        jailbrokens.append(if_jailbroken)
+
+        new_data = {"question_id" : question_id,
+                    "category" : category,
+                    "goal" : goal,
+                    "attack" : args.attack,
+                    "context" : args.context,
+                    "context_length" : context_length,
+                    "answer" : answer,
+                    "jailbroken" : if_jailbroken}
+        add_to_json(answer_filepath, new_data)
+        logger.info(f'Wrote answers to {answer_filepath=}')
 
     # question_id,category,goal,attack,context,context_length,answer,jailbroken
-    new_data = {"question_id" : question_ids,
-                "category" : categories,
-                "goal" : goals,
-                "attack" : [args.attack] * len(question_ids),
-                "context" : [args.context] * len(question_ids),
-                "context_length" : [context_length] * len(question_ids),
-                "answer" : answers,
-                "jailbroken" : jailbrokens}
-    answer_filepath = 'answer_vicuna_' + args.attack + '_' + args.prompt_type + '.json'
-    add_to_json(answer_filepath, new_data)
-    logger.info(f'Wrote answers to {answer_filepath=}')
+    # new_data = {"question_id" : question_ids,
+    #             "category" : categories,
+    #             "goal" : goals,
+    #             "attack" : [args.attack] * len(question_ids),
+    #             "context" : [args.context] * len(question_ids),
+    #             "context_length" : [context_length] * len(question_ids),
+    #             "answer" : answers,
+    #             "jailbroken" : jailbrokens}
+    # add_to_json(answer_filepath, new_data)
+    # logger.info(f'Wrote answers to {answer_filepath=}')
 
     if args.prompt_type == 'harmful':
         num_jailbrokens = sum(jailbrokens)
