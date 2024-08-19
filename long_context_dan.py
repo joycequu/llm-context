@@ -189,19 +189,15 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
 
     conv = get_conversation_template(args.model_path)
     conv.append_message(conv.roles[0], args.adv_suffix) # first time, append adv_suffix
-    conv.append_message(conv.roles[1], None)
     prompt = conv.get_prompt()
     answer = single_round_response(model, tokenizer, prompt)
 
     logger.info(f"Prompt with DAN control: {prompt}")
     logger.info(f"Answer with DAN control: {answer}")
 
-    conv.messages.pop()
     conv.append_message(conv.roles[1], answer)
     conv.append_message(conv.roles[0], msg) # msg = goal
-    if context_length == 0:
-        conv.append_message(conv.roles[1], None)
-    else:
+    if context_length != 0:
         logger.info("last 20 chars of random txt: %s", random_txt[-20:])
         conv.append_messages(conv.roles[1], random_txt)
     prompt = conv.get_prompt()
