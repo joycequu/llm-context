@@ -255,7 +255,7 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
                 "context_length" : [context_length] * len(question_ids),
                 "answer" : answers,
                 "jailbroken" : jailbrokens}
-    answer_filepath = 'answer_vicuna_' + args.attack + '_' + args.prompt_type + '.csv'
+    answer_filepath = 'answer_vicuna_' + args.attack + '_' + args.prompt_type + '.json'
     add_to_json(answer_filepath, new_data)
     logger.info(f'Wrote answers to {answer_filepath=}')
 
@@ -272,7 +272,7 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
                     "num_total" : [num_total],
                     "num_jailbroken" : [num_jailbrokens],
                     "asr" : [asr]}
-        asr_filepath = 'asr_vicuna_' + args.attack + '.csv'
+        asr_filepath = 'asr_vicuna_' + args.attack + '.json'
         add_to_json(asr_filepath, new_data)
         logger.info(f'Wrote ASR to {asr_filepath=}')
 
