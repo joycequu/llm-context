@@ -197,7 +197,7 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
     logger.info(f"Answer with DAN control: {answer}")
 
     conv.messages.pop()
-    conv.append(conv.roles[1], answer)
+    conv.append_message(conv.roles[1], answer)
     conv.append_message(conv.roles[0], msg) # msg = goal
     if context_length == 0:
         conv.append_message(conv.roles[1], None)
