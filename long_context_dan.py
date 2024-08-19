@@ -55,7 +55,7 @@ context_length = 0
 # append new results to csv: let everything now be arrays (appending every asr / 100)
 def add_to_csv(output_filepath, data, if_index=False):
     df_new = pd.DataFrame(data)
-    df_existing = pd.read(output_filepath)
+    df_existing = pd.read_csv(output_filepath)
     df_combined = pd.concat([df_existing, df_new], ignore_index=if_index)
     df_combined.to_csv(output_filepath, header=True, index=if_index)
 
