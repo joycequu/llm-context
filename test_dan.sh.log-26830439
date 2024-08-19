@@ -1,6 +1,0 @@
-/var/spool/slurmd/job26830439/slurm_script: line 3: module: command not found
-mkdir: cannot create directory '/state/partition1/user/ywang5': File exists
-Traceback (most recent call last):
-  File "/home/gridsan/ywang5/projects/llm-context/long_context_dan.py", line 9, in <module>
-    import torch
-ModuleNotFoundError: No module named 'torch'

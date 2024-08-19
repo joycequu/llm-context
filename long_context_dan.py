@@ -236,9 +236,9 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
     new_data = {"question_id" : question_ids,
                 "category" : categories,
                 "goal" : goals,
-                "attack" : [args.attack] * len(question_id),
-                "context" : [args.context] * len(question_id),
-                "context_length" : [context_length] * len(question_id),
+                "attack" : [args.attack] * len(question_ids),
+                "context" : [args.context] * len(question_ids),
+                "context_length" : [context_length] * len(question_ids),
                 "answer" : answers,
                 "jailbroken" : jailbrokens}
     answer_filepath = 'answer_vicuna_' + args.attack + '_' + args.prompt_type + '.csv'
