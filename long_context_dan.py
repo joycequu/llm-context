@@ -59,12 +59,20 @@ def add_to_csv(output_filepath, data, if_index=False):
     df_combined = pd.concat([df_existing, df_new], ignore_index=if_index)
     df_combined.to_csv(output_filepath, header=True, index=if_index)
 
+import json
+import os
+
 def add_to_json(output_filepath, new_data):
-    # Read the existing JSON data if the file exists
-    try:
-        with open(output_filepath, 'r') as file:
-            existing_data = json.load(file)
-    except FileNotFoundError:
+    # Check if the file exists and is not empty
+    if os.path.exists(output_filepath) and os.path.getsize(output_filepath) > 0:
+        try:
+            with open(output_filepath, 'r') as file:
+                existing_data = json.load(file)
+        except json.JSONDecodeError:
+            # If there's an issue with the JSON formatting, start with an empty list
+            existing_data = []
+    else:
+        # If the file doesn't exist or is empty, start with an empty list
         existing_data = []
     # Append new data
     existing_data.append(new_data)
@@ -272,8 +280,8 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
                     "num_total" : [num_total],
                     "num_jailbroken" : [num_jailbrokens],
                     "asr" : [asr]}
-        asr_filepath = 'asr_vicuna_' + args.attack + '.json'
-        add_to_json(asr_filepath, new_data)
+        asr_filepath = 'asr_vicuna_' + args.attack + '.csv'
+        add_to_csv(asr_filepath, new_data)
         logger.info(f'Wrote ASR to {asr_filepath=}')
 
 if __name__ == "__main__":
