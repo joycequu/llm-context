@@ -280,7 +280,7 @@ if __name__ == "__main__":
     # added or modified arguments for long-context
     parser.add_argument("--context", type=str, default="news")
                         # choices=['news', 'values']
-    parser.add_argumets("--prompt_type", type=str, default="harmful")
+    parser.add_argument("--prompt_type", type=str, default="harmful")
     parser.add_argument("--attack", type=str, default='general_dan')
                         # choices=['general_dan']
     args = parser.parse_args()
