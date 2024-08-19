@@ -45,7 +45,7 @@ general_dan_control = read_file('dan/general_dan.txt')
 news_txt = read_file('random_text/news_txt.txt')
 values_txt_dict = {0 : ""} # updated values_txt version
 for l in range(1000, 6000, 1000):
-    filename = 'random_text/values_txt_{l}.txt'
+    filename = f'random_text/values_txt_{l}.txt'
     values_txt_dict[l] = read_file(filename)
 
 # set context length
