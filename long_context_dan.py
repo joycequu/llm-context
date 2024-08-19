@@ -198,7 +198,7 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
     
     # removing pbar here temporarily
     for question_id, category, goal in prompts_data:
-        logger.info(f'{question_id}', f'{category=}', f'{goal=}')
+        logger.info(f'{question_id=}, {category=}, {goal=}')
         # update csv
         question_ids.append(question_id)
         categories.append(category)
@@ -220,7 +220,9 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
         answers.append(answer)
         logger.info(f'{answer=}')
         if args.prompt_type == 'harmful':
-            jailbrokens.append(_evaluate_answer(answer))
+            if_jailbroken = _evaluate_answer(answer)
+            logger.info(f'{if_jailbroken=}')
+            jailbrokens.append(if_jailbroken)
         else:
             jailbrokens.append(None)
 
@@ -279,9 +281,9 @@ if __name__ == "__main__":
     parser.add_argument("--adv-check", action="store_true")
     # added or modified arguments for long-context
     parser.add_argument("--context", type=str, default="news")
-                        # choices=['news', 'values']
+                        # choices=[None, 'news', 'values']
     parser.add_argument("--prompt_type", type=str, default="harmful")
-    parser.add_argument("--attack", type=str, default='general_dan')
+    parser.add_argument("--attack", type=str, default="general_dan")
                         # choices=['general_dan']
     args = parser.parse_args()
 
