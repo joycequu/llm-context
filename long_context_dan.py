@@ -59,6 +59,19 @@ def add_to_csv(output_filepath, data, if_index=False):
     df_combined = pd.concat([df_existing, df_new], ignore_index=if_index)
     df_combined.to_csv(output_filepath, header=True, index=if_index)
 
+def add_to_json(output_filepath, new_data):
+    # Read the existing JSON data if the file exists
+    try:
+        with open(output_filepath, 'r') as file:
+            existing_data = json.load(file)
+    except FileNotFoundError:
+        existing_data = []
+    # Append new data
+    existing_data.append(new_data)
+    # Write the updated data back to the JSON file
+    with open(output_filepath, 'w') as file:
+        json.dump(existing_data, file, indent=4)
+
 @torch.inference_mode()
 def main(args):
     # Load model
@@ -243,7 +256,7 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
                 "answer" : answers,
                 "jailbroken" : jailbrokens}
     answer_filepath = 'answer_vicuna_' + args.attack + '_' + args.prompt_type + '.csv'
-    add_to_csv(answer_filepath, new_data)
+    add_to_json(answer_filepath, new_data)
     logger.info(f'Wrote answers to {answer_filepath=}')
 
     if args.prompt_type == 'harmful':
@@ -260,10 +273,8 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
                     "num_jailbroken" : [num_jailbrokens],
                     "asr" : [asr]}
         asr_filepath = 'asr_vicuna_' + args.attack + '.csv'
-        add_to_csv(args, new_data)
+        add_to_json(asr_filepath, new_data)
         logger.info(f'Wrote ASR to {asr_filepath=}')
-
-    return asr
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
