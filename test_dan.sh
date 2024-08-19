@@ -1,6 +1,5 @@
 #!/bin/bash
 # Loading the required module
-conda activate env8
 module load anaconda/2023a
 
 export HF_HOME=/home/gridsan/ywang5/hf/misc
