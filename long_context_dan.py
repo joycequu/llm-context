@@ -165,9 +165,8 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
     prompt = conv.get_prompt()
     answer = single_round_response(model, tokenizer, prompt)
 
-    if args.debug: # only log when successful
-        logger.info(f"Prompt: {prompt}")
-        logger.info(f"Answer: {answer}")
+    logger.info(f"Prompt with DAN control: {prompt}")
+    logger.info(f"Answer with DAN control: {answer}")
 
     # add long context to agent
     logger.info("last 20 chars of random txt: %s", random_txt[-20:])
@@ -177,9 +176,9 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
     conv.append_message(conv.roles[0], msg)
     prompt = conv.get_prompt()
     answer = single_round_response(model, tokenizer, prompt)
-    if args.debug:
-        logger.info(f"Prompt: {prompt}")
-        logger.info(f"Answer: {answer}")
+
+    logger.info(f"Prompt after prompting: {prompt}")
+    logger.info(f"Answer after prompting: {answer}")
 
     return answer
 
@@ -206,10 +205,13 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
 
         msg = f'{goal}'
         # attack method (note: reformatted compared to main.py)
-        if args.attack == 'general_dan':
+        if args.attack == 'none':
+            args.adv_suffix = ""
+        elif args.attack == 'general_dan':
             args.adv_suffix = general_dan_control
+
         # long context type
-        if args.context is None:
+        if args.context == 'none':
             random_txt = ""
         elif args.context == 'news':
             random_txt = news_txt[:context_length]
@@ -281,10 +283,10 @@ if __name__ == "__main__":
     parser.add_argument("--adv-check", action="store_true")
     # added or modified arguments for long-context
     parser.add_argument("--context", type=str, default="news")
-                        # choices=[None, 'news', 'values']
+                        # choices=['none', 'news', 'values']
     parser.add_argument("--prompt_type", type=str, default="harmful")
     parser.add_argument("--attack", type=str, default="general_dan")
-                        # choices=['general_dan']
+                        # choices=['none', 'general_dan']
     args = parser.parse_args()
 
     # Reset default repetition penalty for T5 models.
