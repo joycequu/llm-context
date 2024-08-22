@@ -215,9 +215,10 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
     window_used += len(tokenizer.encode(random_txt))
     window_used += len(tokenizer.encode(answer))
 
+    logger.info(f"Total number of tokens used: {window_used}")
     context_window_length = model.config.max_position_embeddings
     if window_used > context_window_length:
-        print(f"{window_used=} tokens exceeded {context_window_length=} tokens")
+        logger.info(f"{window_used=} tokens exceeded {context_window_length=} tokens")
 
     return answer
 
