@@ -103,7 +103,7 @@ def main(args):
     # evaluate_long_context(model, tokenizer, prompts_data, args)
 
     for _ in range(1): # number of repeats
-        for cur_length in range(0, 6000, 1000):
+        for cur_length in range(0, 3000, 1000):
             global context_length
             context_length = cur_length
             logger.info(f'{context_length=}')

@@ -40,6 +40,7 @@ def read_file(filepath):
 
 # set model paths
 general_dan_control = read_file('dan/general_dan.txt')
+short_dan_control = read_file('dan/short_dan.txt')
 num_prompts = 5 # normally 100, 20 for trial purpose
 
 # long_context_types definition
@@ -239,6 +240,8 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
             args.adv_suffix = ""
         elif args.attack == 'general_dan':
             args.adv_suffix = general_dan_control
+        elif args.attack == 'short_dan':
+            args.adv_suffix = short_dan_control
 
         # long context type
         if args.context == 'none':
@@ -319,7 +322,7 @@ if __name__ == "__main__":
                         # choices=['none', 'news', 'values']
     # parser.add_argument("--prompt_type", type=str, default="harmful")
     parser.add_argument("--attack", type=str, default="general_dan")
-                        # choices=['none', 'general_dan']
+                        # choices=['none', 'general_dan', 'short_dan']
     args = parser.parse_args()
 
     # Reset default repetition penalty for T5 models.
