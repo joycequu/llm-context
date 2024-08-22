@@ -130,7 +130,7 @@ def read_data(args):
     return list(zip(goals, targets, controls))
 
 def read_prompts(args):
-    prompts_filepath = 'data/prompts_only/' + args.prompt_type + '_prompts.csv'
+    prompts_filepath = 'data/prompts_only/harmful_prompts.csv'
     logger.info(f'{prompts_filepath=}')
     data = pd.read_csv(prompts_filepath)
     question_ids = data['question_id'].tolist()[:num_prompts]
@@ -223,7 +223,7 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
     # goals = []
     # answers = []
     jailbrokens = []
-    answer_filepath = 'answer_vicuna_' + args.attack + '_' + args.prompt_type + '.json'
+    answer_filepath = 'answer_vicuna_' + args.attack + '_harmful.json'
     
     # removing pbar here temporarily
     for question_id, category, goal in prompts_data:
@@ -250,11 +250,8 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
         
         answer = long_context_response(model, tokenizer, msg, random_txt, args)
         # answers.append(answer)
-        if args.prompt_type == 'harmful':
-            if_jailbroken = _evaluate_answer(answer)
-            logger.info(f'{if_jailbroken=}')
-        else:
-            if_jailbroken = None
+        if_jailbroken = _evaluate_answer(answer)
+        logger.info(f'{if_jailbroken=}')
         jailbrokens.append(if_jailbroken)
 
         new_data = {"question_id" : question_id,
@@ -280,22 +277,21 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
     # add_to_json(answer_filepath, new_data)
     # logger.info(f'Wrote answers to {answer_filepath=}')
 
-    if args.prompt_type == 'harmful':
-        num_jailbrokens = sum(jailbrokens)
-        num_total = len(jailbrokens)
-        logger.info(f'{num_jailbrokens=}, {num_total=}')
-        asr = sum(jailbrokens) / len(jailbrokens)
-        logger.info(f'Final ASR: {asr}')
-        # attack,context,context_length,asr
-        new_data = {"attack" : [args.attack],
-                    "context" : [args.context],
-                    "context_length" : [context_length],
-                    "num_total" : [num_total],
-                    "num_jailbroken" : [num_jailbrokens],
-                    "asr" : [asr]}
-        asr_filepath = 'asr_vicuna_' + args.attack + '.csv'
-        add_to_csv(asr_filepath, new_data)
-        logger.info(f'Wrote ASR to {asr_filepath=}')
+    num_jailbrokens = sum(jailbrokens)
+    num_total = len(jailbrokens)
+    logger.info(f'{num_jailbrokens=}, {num_total=}')
+    asr = sum(jailbrokens) / len(jailbrokens)
+    logger.info(f'Final ASR: {asr}')
+    # attack,context,context_length,asr
+    new_data = {"attack" : [args.attack],
+                "context" : [args.context],
+                "context_length" : [context_length],
+                "num_total" : [num_total],
+                "num_jailbroken" : [num_jailbrokens],
+                "asr" : [asr]}
+    asr_filepath = 'asr_vicuna_' + args.attack + '.csv'
+    add_to_csv(asr_filepath, new_data)
+    logger.info(f'Wrote ASR to {asr_filepath=}')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -321,7 +317,7 @@ if __name__ == "__main__":
     # added or modified arguments for long-context
     parser.add_argument("--context", type=str, default="news")
                         # choices=['none', 'news', 'values']
-    parser.add_argument("--prompt_type", type=str, default="harmful")
+    # parser.add_argument("--prompt_type", type=str, default="harmful")
     parser.add_argument("--attack", type=str, default="general_dan")
                         # choices=['none', 'general_dan']
     args = parser.parse_args()

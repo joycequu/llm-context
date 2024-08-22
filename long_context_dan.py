@@ -40,7 +40,7 @@ def read_file(filepath):
 
 # set model paths
 general_dan_control = read_file('dan/general_dan.txt')
-num_prompts = 5 # normally 100, 20 for trial purpose
+num_prompts = 20 # normally 100, 20 for trial purpose
 
 # long_context_types definition
 news_txt = read_file('random_text/news_txt.txt')
@@ -99,14 +99,14 @@ def main(args):
         logger.info('data loaded')
     
     # trial run for no context
-    logger.info(f'{context_length=}')
-    evaluate_long_context(model, tokenizer, prompts_data, args)
+    # logger.info(f'{context_length=}')
+    # evaluate_long_context(model, tokenizer, prompts_data, args)
 
-    # for _ in range(1): # number of repeats
-    #     for cur_length in range(0, 6000, 1000):
-    #         context_length = cur_length
-    #         logger.info(f'{context_length=}')
-    #         evaluate_long_context(model, tokenizer, prompts_data, args) # returns asr
+    for _ in range(1): # number of repeats
+        for cur_length in range(0, 6000, 1000):
+            context_length = cur_length
+            logger.info(f'{context_length=}')
+            evaluate_long_context(model, tokenizer, prompts_data, args) # returns asr
 
 def read_data(args):
     data = pd.read_csv(args.data)
