@@ -198,6 +198,9 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
     logger.info(f"Answer (DAN): {answer}")
 
     conv.append_message(conv.roles[1], answer)
+    window_used = len(tokenizer.encode(prompt)) + len(tokenizer.encode(answer))
+    logger.info(f"DAN and Answer: {window_used} tokens used")
+
     conv.append_message(conv.roles[0], msg) # msg = goal
     if context_length != 0:
         logger.info("last 20 chars of random txt: %s", random_txt[-20:])
@@ -207,6 +210,14 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
 
     logger.info(f"Prompt (Goal): {prompt}")
     logger.info(f"Answer (Goal): {answer}")
+
+    window_used += len(tokenizer.encode(prompt))
+    window_used += len(tokenizer.encode(random_txt))
+    window_used += len(tokenizer.encode(answer))
+
+    context_window_length = model.config.max_position_embeddings
+    if window_used > context_window_length:
+        print(f"{window_used=} tokens exceeded {context_window_length=} tokens")
 
     return answer
 
