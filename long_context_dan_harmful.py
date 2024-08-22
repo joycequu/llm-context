@@ -41,7 +41,7 @@ def read_file(filepath):
 # set model paths
 general_dan_control = read_file('dan/general_dan.txt')
 short_dan_control = read_file('dan/short_dan.txt')
-num_prompts = 5 # normally 100, 20 for trial purpose
+num_prompts = 50 # normally 100, 20 for trial purpose
 
 # long_context_types definition
 news_txt = read_file('random_text/news_txt.txt')
