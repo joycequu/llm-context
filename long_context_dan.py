@@ -201,7 +201,7 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
     conv.append_message(conv.roles[0], msg) # msg = goal
     if context_length != 0:
         logger.info("last 20 chars of random txt: %s", random_txt[-20:])
-        conv.append_messages(conv.roles[1], random_txt)
+        conv.append_message(conv.roles[1], random_txt)
     prompt = conv.get_prompt()
     answer = single_round_response(model, tokenizer, prompt)
 
