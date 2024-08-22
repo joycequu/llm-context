@@ -320,7 +320,6 @@ if __name__ == "__main__":
     # added or modified arguments for long-context
     parser.add_argument("--context", type=str, default="news")
                         # choices=['none', 'news', 'values']
-    # parser.add_argument("--prompt_type", type=str, default="harmful")
     parser.add_argument("--attack", type=str, default="general_dan")
                         # choices=['none', 'general_dan', 'short_dan']
     args = parser.parse_args()
@@ -346,6 +345,5 @@ if __name__ == "__main__":
     logger.info(f'{args.model_path=}')
     logger.info(f'{args.attack=}')
     logger.info(f'{args.context=}')
-    logger.info(f'{args.prompt_type=}')
 
     main(args)
