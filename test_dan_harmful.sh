@@ -8,4 +8,4 @@ export TRANSFORMERS_CACHE=/home/gridsan/ywang5/hf/models
 export TMPDIR=/state/partition1/user/$USER
 mkdir $TMPDIR
 
-python /home/gridsan/ywang5/projects/llm-context/long_context_dan.py --model_path "/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3" --attack "short_dan"
+python /home/gridsan/ywang5/projects/llm-context/long_context_dan_harmful.py --model_path "/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3" --attack "short_dan"
