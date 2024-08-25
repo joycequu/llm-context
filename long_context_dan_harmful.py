@@ -26,6 +26,7 @@ global general_dan_control, news_txt, values_txt, context_length, num_prompts
 os.environ["TRANSFORMERS_OFFLINE"] = "1" # running offline
 model_path = "/home/gridsan/ywang5/hf/models/mistral-7b-v0.2" # manually downloaded model
 server_path = '/home/gridsan/ywang5/projects'
+count_tokens = True
 
 # resolve lock issue
 def use_softfilelock_in_hf():
@@ -198,8 +199,10 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
     logger.info(f"Answer (DAN): {answer}")
 
     conv.append_message(conv.roles[1], answer)
-    window_used = len(tokenizer.encode(prompt)) + len(tokenizer.encode(answer))
-    logger.info(f"DAN and Answer: {window_used} tokens used")
+    
+    if count_tokens:
+        window_used = len(tokenizer.encode(prompt)) + len(tokenizer.encode(answer))
+        logger.info(f"DAN and Answer: {window_used} tokens used")
 
     conv.append_message(conv.roles[0], msg) # msg = goal
     if context_length != 0:
@@ -211,14 +214,14 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
     logger.info(f"Prompt (Goal): {prompt}")
     logger.info(f"Answer (Goal): {answer}")
 
-    window_used += len(tokenizer.encode(prompt))
-    window_used += len(tokenizer.encode(random_txt))
-    window_used += len(tokenizer.encode(answer))
-
-    logger.info(f"Total number of tokens used: {window_used}")
-    context_window_length = model.config.max_position_embeddings
-    if window_used > context_window_length:
-        logger.info(f"{window_used=} tokens exceeded {context_window_length=} tokens")
+    if count_tokens:
+        window_used += len(tokenizer.encode(prompt))
+        window_used += len(tokenizer.encode(random_txt))
+        window_used += len(tokenizer.encode(answer))
+        logger.info(f"Total number of tokens used: {window_used}")
+        context_window_length = model.config.max_position_embeddings
+        if window_used > context_window_length:
+            logger.info(f"{window_used=} tokens exceeded {context_window_length=} tokens")
 
     return answer
 
@@ -230,21 +233,12 @@ def _evaluate_answer(answer):
 
 # test function for long_context (temporary) - DAN attack
 def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add another parameter: if_harmful
-    # set up for writing to csv
-    # question_ids = []
-    # categories = []
-    # goals = []
-    # answers = []
     jailbrokens = []
     answer_filepath = 'results/answer_mistral_' + args.attack + '_harmful.json'
     
     # removing pbar here temporarily
     for question_id, category, goal in prompts_data:
         logger.info(f'{question_id=}, {category=}, {goal=}')
-        # update csv
-        # question_ids.append(question_id)
-        # categories.append(category)
-        # goals.append(goal)
 
         msg = f'{goal}'
         # attack method (note: reformatted compared to main.py)
@@ -280,18 +274,6 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
         add_to_json(answer_filepath, new_data)
         logger.info(f'Wrote answers to {answer_filepath=}')
 
-    # question_id,category,goal,attack,context,context_length,answer,jailbroken
-    # new_data = {"question_id" : question_ids,
-    #             "category" : categories,
-    #             "goal" : goals,
-    #             "attack" : [args.attack] * len(question_ids),
-    #             "context" : [args.context] * len(question_ids),
-    #             "context_length" : [context_length] * len(question_ids),
-    #             "answer" : answers,
-    #             "jailbroken" : jailbrokens}
-    # add_to_json(answer_filepath, new_data)
-    # logger.info(f'Wrote answers to {answer_filepath=}')
-
     num_jailbrokens = sum(jailbrokens)
     num_total = len(jailbrokens)
     logger.info(f'{num_jailbrokens=}, {num_total=}')
@@ -304,7 +286,7 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
                 "num_total" : [num_total],
                 "num_jailbroken" : [num_jailbrokens],
                 "asr" : [asr]}
-    asr_filepath = 'asr_mistral_' + args.attack + '.csv'
+    asr_filepath = 'asr_v_' + args.attack + '.csv'
     add_to_csv(asr_filepath, new_data)
     logger.info(f'Wrote ASR to {asr_filepath=}')
 

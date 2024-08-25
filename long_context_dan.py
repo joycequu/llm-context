@@ -24,7 +24,7 @@ global general_dan_control, news_txt, values_txt, context_length, num_prompts
 
 # set path/environment for server
 os.environ["TRANSFORMERS_OFFLINE"] = "1" # running offline
-model_path = "/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3" # manually downloaded model
+model_path = "/home/gridsan/ywang5/hf/models/mistral-7b-v0.2" # manually downloaded model
 server_path = '/home/gridsan/ywang5/projects'
 
 # resolve lock issue
@@ -222,7 +222,7 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
     # goals = []
     # answers = []
     jailbrokens = []
-    answer_filepath = 'answer_vicuna_' + args.attack + '_' + args.prompt_type + '.json'
+    answer_filepath = 'answer_mistral_' + args.attack + '_' + args.prompt_type + '.json'
     
     # removing pbar here temporarily
     for question_id, category, goal in prompts_data:
@@ -292,14 +292,14 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
                     "num_total" : [num_total],
                     "num_jailbroken" : [num_jailbrokens],
                     "asr" : [asr]}
-        asr_filepath = 'asr_vicuna_' + args.attack + '.csv'
+        asr_filepath = 'asr_mistral_' + args.attack + '.csv'
         add_to_csv(asr_filepath, new_data)
         logger.info(f'Wrote ASR to {asr_filepath=}')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     add_model_args(parser)
-    parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/vicuna-7b-v1.3")
+    parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/mistral-7b-v0.2")
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--repetition_penalty", type=float, default=1.0)
     parser.add_argument("--max-new-tokens", type=int, default=512)
