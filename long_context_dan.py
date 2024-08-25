@@ -40,7 +40,7 @@ def read_file(filepath):
 
 # set model paths
 general_dan_control = read_file('dan/general_dan.txt')
-num_prompts = 20 # normally 100, 20 for trial purpose
+num_prompts = 100 # normally 100, 20 for trial purpose
 
 # long_context_types definition
 news_txt = read_file('random_text/news_txt.txt')
@@ -102,8 +102,8 @@ def main(args):
     # logger.info(f'{context_length=}')
     # evaluate_long_context(model, tokenizer, prompts_data, args)
 
-    for _ in range(1): # number of repeats
-        for cur_length in range(0, 3000, 1000):
+    for _ in range(5): # number of repeats
+        for cur_length in range(0, 4000, 1000):
             global context_length
             context_length = cur_length
             logger.info(f'{context_length=}')
@@ -222,7 +222,7 @@ def evaluate_long_context(model, tokenizer, prompts_data, args): # need to add a
     # goals = []
     # answers = []
     jailbrokens = []
-    answer_filepath = 'answer_mistral_' + args.attack + '_' + args.prompt_type + '.json'
+    answer_filepath = 'answer_mistral_' + args.attack + '_' + args.context + '_' + args.prompt_type + '.json'
     
     # removing pbar here temporarily
     for question_id, category, goal in prompts_data:
