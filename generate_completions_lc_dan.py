@@ -44,7 +44,7 @@ general_dan_control = read_file('dan/general_dan.txt')
 short_dan_control = read_file('dan/short_dan.txt')
 
 # number of test_cases
-num_prompts = 20 # normally 100, 20 for trial purpose
+num_prompts = 5 # normally 100, 20 for trial purpose
 
 # long_context_types definition
 news_txt = read_file('random_text/news_txt.txt')
@@ -200,6 +200,7 @@ def generate_completions(model, tokenizer, behavior_data, args):
         random_txt = values_txt_dict[context_length] # updated values_txt
     
     mutate_info = args.attack + "_" + args.context + "_" + str(context_length)
+
     for behavior_id, behavior in behavior_data:
         msg = f'{behavior}'
         generation = long_context_response(model, tokenizer, msg, random_txt, args)
