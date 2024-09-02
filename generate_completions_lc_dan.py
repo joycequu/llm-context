@@ -61,9 +61,9 @@ def append_to_json(file_path, behavior_id, mutate_info, generation): # no test_c
     # Load existing data from the JSON file
     try:
         with open(file_path, 'r') as file:
-            data = json.load(file)
+            content = file.read()
+            data = json.loads(content) if content else {}
     except FileNotFoundError:
-        # If the file doesn't exist, initialize an empty dictionary
         data = {}
     # Create the new entry to be added
     new_entry = {
