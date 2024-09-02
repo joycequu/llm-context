@@ -39,10 +39,12 @@ def read_file(filepath):
     with open(filepath, 'r') as file:
         return file.read()
 
-# set model paths
+# dan_control
 general_dan_control = read_file('dan/general_dan.txt')
 short_dan_control = read_file('dan/short_dan.txt')
-num_prompts = 50 # normally 100, 20 for trial purpose
+
+# number of test_cases
+num_prompts = 20 # normally 100, 20 for trial purpose
 
 # long_context_types definition
 news_txt = read_file('random_text/news_txt.txt')
@@ -60,9 +62,6 @@ def add_to_csv(output_filepath, data, if_index=False):
     df_existing = pd.read_csv(output_filepath)
     df_combined = pd.concat([df_existing, df_new], ignore_index=if_index)
     df_combined.to_csv(output_filepath, header=True, index=if_index)
-
-import json
-import os
 
 def add_to_json(output_filepath, new_data):
     # Check if the file exists and is not empty
@@ -112,9 +111,9 @@ def main(args):
 
 def read_data(args):
     data = pd.read_csv(args.data)
-    targets = data['target'].tolist()[:100]
+    targets = data['target'].tolist()[:num_prompts]
     if 'goal' in data.columns:
-        goals = data['goal'].tolist()[:100]
+        goals = data['goal'].tolist()[:num_prompts]
     else:
         goals = [""] * len(targets)
     if args.adv_prompts != "":
@@ -124,11 +123,11 @@ def read_data(args):
         # adv_prompts = [adv_prompts[str(i)]['attack']['suffix'] for i in range(2)]
         # for original gcg data format
         if len(adv_prompts["controls"]) > 150:
-            controls = adv_prompts["controls"][1::2][:100]
+            controls = adv_prompts["controls"][1::2][:num_prompts]
         else:
-            controls = adv_prompts["controls"][:100]
+            controls = adv_prompts["controls"][:num_prompts]
     else:
-        controls = [GCG_PROMPTS[args.gcg_id]] * 100
+        controls = [GCG_PROMPTS[args.gcg_id]] * num_prompts
     return list(zip(goals, targets, controls))
 
 def read_prompts(args):
