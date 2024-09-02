@@ -1,9 +1,0 @@
-/var/spool/slurmd/job26940974/slurm_script: line 3: module: command not found
-/home/gridsan/ywang5/.local/lib/python3.9/site-packages/transformers/utils/hub.py:127: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
-  warnings.warn(
-Traceback (most recent call last):
-  File "/home/gridsan/ywang5/projects/llm-context/generate_completions_lc_dan.py", line 43, in <module>
-    general_dan_control = read_file('./dan/general_dan.txt')
-  File "/home/gridsan/ywang5/projects/llm-context/generate_completions_lc_dan.py", line 39, in read_file
-    with open(filepath, 'r') as file:
-FileNotFoundError: [Errno 2] No such file or directory: './dan/general_dan.txt'
