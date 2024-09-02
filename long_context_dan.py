@@ -117,7 +117,7 @@ def read_data(args):
     else:
         goals = [""] * len(targets)
     if args.adv_prompts != "":
-        import json 
+        import json
         adv_prompts = json.load(open(args.adv_prompts))
         # import pdb; pdb.set_trace()
         # adv_prompts = [adv_prompts[str(i)]['attack']['suffix'] for i in range(2)]
