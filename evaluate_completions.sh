@@ -2,12 +2,13 @@
 # Loading the required module
 module load anaconda/2023a
 
+export PATH=$HOME/.local/cuda/bin:$PATH
+export LD_LIBRARY_PATH=$HOME/.local/cuda/lib:$LD_LIBRARY_PATH
+
 export HF_HOME=/home/gridsan/ywang5/hf/misc
 export HF_DATASETS_CACHE=/home/gridsan/ywang5/hf/datasets
 export DISKCACHE_DIR=/home/gridsan/ywang5/hf/misc
 export TMPDIR=/state/partition1/user/$USER
-export PATH=$HOME/.local/cuda/bin:$PATH
-export LD_LIBRARY_PATH=$HOME/.local/cuda/lib:$LD_LIBRARY_PATH
 
 mkdir $TMPDIR
 
