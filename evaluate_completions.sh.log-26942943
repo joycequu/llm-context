@@ -1,0 +1,42 @@
+/var/spool/slurmd/job26942943/slurm_script: line 3: module: command not found
+mkdir: cannot create directory '/state/partition1/user/ywang5/evaluate': File exists
+cls_path=/home/gridsan/ywang5/hf/models/HarmBench-Llama-2-13b-cls
+behaviors_path=/home/gridsan/ywang5/projects/llm-context/data/behavior_datasets/harmbench_behaviors_text_all.csv
+completions_path=/home/gridsan/ywang5/projects/llm-context/completions/completion_mistral_general_dan_harmful.json
+save_path=/home/gridsan/ywang5/projects/llm-context/results/results.json
+2024-09-03 08:53:43.504448: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-09-03 08:53:43.639295: I tensorflow/core/util/port.cc:104] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2024-09-03 08:53:44.461971: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer.so.7'; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/gridsan/ywang5/local_cuda/lib64:/usr/local/pkg/cuda/cuda-11.2/lib64:
+2024-09-03 08:53:44.462479: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer_plugin.so.7'; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/gridsan/ywang5/local_cuda/lib64:/usr/local/pkg/cuda/cuda-11.2/lib64:
+2024-09-03 08:53:44.462499: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+Traceback (most recent call last):
+  File "/home/gridsan/ywang5/projects/llm-context/evaluate_completions.py", line 3, in <module>
+    from vllm import LLM, SamplingParams
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/vllm/__init__.py", line 6, in <module>
+    from vllm.entrypoints.llm import LLM
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/vllm/entrypoints/llm.py", line 15, in <module>
+    from vllm.model_executor.guided_decoding import (
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/vllm/model_executor/guided_decoding/__init__.py", line 8, in <module>
+    from vllm.model_executor.guided_decoding.outlines_decoding import (
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/vllm/model_executor/guided_decoding/outlines_decoding.py", line 15, in <module>
+    from vllm.model_executor.guided_decoding.outlines_logits_processors import (
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/vllm/model_executor/guided_decoding/outlines_logits_processors.py", line 25, in <module>
+    from outlines import grammars
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/outlines/__init__.py", line 2, in <module>
+    import outlines.generate
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/outlines/generate/__init__.py", line 2, in <module>
+    from .cfg import cfg
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/outlines/generate/cfg.py", line 3, in <module>
+    from outlines.fsm.guide import CFGGuide
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/outlines/fsm/guide.py", line 109, in <module>
+    def create_states_mapping(
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/outlines/caching.py", line 93, in decorator
+    memory = get_cache()
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/outlines/caching.py", line 55, in get_cache
+    memory = Cache(
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/diskcache/core.py", line 478, in __init__
+    self.reset(key, value, update=False)
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/diskcache/core.py", line 2431, in reset
+    ((old_value,),) = sql(
+sqlite3.OperationalError: disk I/O error
