@@ -101,10 +101,14 @@ def main(args):
     # trial run for no context
     # logger.info(f'{context_length=}')
     # evaluate_long_context(model, tokenizer, prompts_data, args)
-
-    for _ in range(5): # number of repeats
-        for cur_length in range(0, 4000, 1000):
-            global context_length
+    global context_length
+    if args.context == "news":
+        for _ in range(3):
+            logger.info(f'{context_length=}')
+            evaluate_long_context(model, tokenizer, prompts_data, args)
+            
+    for _ in range(3): # number of repeats
+        for cur_length in range(1000, 4000, 1000):
             context_length = cur_length
             logger.info(f'{context_length=}')
             evaluate_long_context(model, tokenizer, prompts_data, args) # returns asr
