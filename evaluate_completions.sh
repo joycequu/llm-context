@@ -5,13 +5,15 @@ module load anaconda/2023a
 export PATH=$HOME/.local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=$HOME/.local/cuda/lib:$LD_LIBRARY_PATH
 
-export HF_HOME=/home/gridsan/ywang5/hf/misc
-export HF_DATASETS_CACHE=/home/gridsan/ywang5/hf/datasets
-
 export TMPDIR=/state/partition1/user/$USER
 mkdir $TMPDIR
-export DISKCACHE_DIR=/state/partition1/user/$USER
-export CACHE_DIR=/state/partition1/user/$USER
+
+export DISKCACHE_DIR=$TMPDIR
+export CACHE_DIR=$TMPDIR
+export HF_HOME=$TMPDIR
+export HF_DATASETS_CACHE=$TMPDIR
+
+
 
 
 cls_path='/home/gridsan/ywang5/hf/models/HarmBench-Llama-2-13b-cls'
