@@ -1,0 +1,6 @@
+/var/spool/slurmd/job26942740/slurm_script: line 3: module: command not found
+mkdir: cannot create directory '/state/partition1/user/ywang5': File exists
+cls_path=/home/gridsan/ywang5/hf/models/HarmBench-Llama-2-13b-cls
+behaviors_path=
+completions_path=/home/gridsan/ywang5/projects/llm-context/completions/completion_mistral_general_dan_harmful.json
+save_path=/home/gridsan/ywang5/projects/llm-context/results/results.json
