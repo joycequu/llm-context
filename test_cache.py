@@ -7,7 +7,9 @@
 # print("Default cache directory:", cache.directory)
 
 import diskcache as dc
-import os
+import os, logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 cache_dir = '/home/gridsan/ywang5/tmp'
 os.makedirs(cache_dir, exist_ok=True)
