@@ -8,6 +8,7 @@ export LD_LIBRARY_PATH=$HOME/.local/cuda/lib:$LD_LIBRARY_PATH
 export HF_HOME=/home/gridsan/ywang5/hf/misc
 export HF_DATASETS_CACHE=/home/gridsan/ywang5/hf/datasets
 export DISKCACHE_DIR=/home/gridsan/ywang5/hf/misc
+export CACHE_DIR=/home/gridsan/ywang5/hf/misc
 export TMPDIR=/state/partition1/user/$USER
 mkdir $TMPDIR
 
