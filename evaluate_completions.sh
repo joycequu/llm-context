@@ -9,7 +9,6 @@ export HF_HOME=/home/gridsan/ywang5/hf/misc
 export HF_DATASETS_CACHE=/home/gridsan/ywang5/hf/datasets
 export DISKCACHE_DIR=/home/gridsan/ywang5/hf/misc
 export TMPDIR=/state/partition1/user/$USER
-
 mkdir $TMPDIR
 
 cls_path='/home/gridsan/ywang5/hf/models/HarmBench-Llama-2-13b-cls'
