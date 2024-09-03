@@ -44,7 +44,7 @@ general_dan_control = read_file('dan/general_dan.txt')
 short_dan_control = read_file('dan/short_dan.txt')
 
 # number of test_cases
-num_prompts = 5 # normally 100, 20 for trial purpose
+num_prompts = 400 # normally 100, 20 for trial purpose
 
 # long_context_types definition
 news_txt = read_file('random_text/news_txt.txt')
@@ -108,14 +108,19 @@ def main(args):
         logger.info('data loaded')
     
     # trial run for no context
-    logger.info(f'{context_length=}')
-    generate_completions(model, tokenizer, behavior_data, args)
+    # logger.info(f'{context_length=}')
+    # generate_completions(model, tokenizer, behavior_data, args)
 
-    # for _ in range(1): # number of repeats
-    #     for cur_length in range(0, 6000, 1000):
-    #         context_length = cur_length
-    #         logger.info(f'{context_length=}')
-    #         evaluate_long_context(model, tokenizer, prompts_data, args) # returns asr
+    # no context
+    if args.context == "news":
+        logger.info(f'{context_length=}')
+        generate_completions(model, tokenizer, behavior_data, args)
+    
+    for _ in range(1): # number of repeats
+        for cur_length in range(1000, 4000, 1000):
+            context_length = cur_length
+            logger.info(f'{context_length=}')
+            generate_completions(model, tokenizer, behavior_data, args) # returns asr
 
 def single_round_response(model, tokenizer, prompt):
     # Run inference
@@ -182,14 +187,13 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
 # test function for long_context (temporary) - DAN attack
 def generate_completions(model, tokenizer, behavior_data, args):
     logger.info(f'{context_length=}')
-    # completion filepath
-    completion_filepath = 'completions/completion_mistral_' + args.attack + '_harmful.json'
+
     # attack method (note: reformatted compared to main.py)
     if args.attack == 'none':
         args.adv_suffix = ""
-    elif args.attack == 'general_dan':
+    elif args.attack == 'generalDAN':
         args.adv_suffix = general_dan_control
-    elif args.attack == 'short_dan':
+    elif args.attack == 'shortDAN':
         args.adv_suffix = short_dan_control
     # long context type
     if args.context == 'none':
@@ -199,7 +203,8 @@ def generate_completions(model, tokenizer, behavior_data, args):
     elif args.context == 'values':
         random_txt = values_txt_dict[context_length] # updated values_txt
     
-    mutate_info = args.attack + "_" + args.context + "_" + str(context_length)
+    mutate_info = "mistral_" + args.attack + "_" + args.context + "_" + str(context_length)
+    completion_filepath = 'completions/completion_' + mutate_info + '_harmful.json'
 
     for behavior_id, behavior in behavior_data:
         msg = f'{behavior}'
@@ -225,8 +230,8 @@ if __name__ == "__main__":
     # added or modified arguments for long-context
     parser.add_argument("--context", type=str, default="news")
                         # choices=['none', 'news', 'values']
-    parser.add_argument("--attack", type=str, default="general_dan") # limited to type of DAN
-                        # choices=['none', 'general_dan', 'short_dan']
+    parser.add_argument("--attack", type=str, default="generalDAN") # limited to type of DAN
+                        # choices=['none', 'generalDAN', 'shortDAN']
     args = parser.parse_args()
 
     # Reset default repetition penalty for T5 models.

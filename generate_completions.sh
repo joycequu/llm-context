@@ -7,4 +7,5 @@ export HF_DATASETS_CACHE=/home/gridsan/ywang5/hf/datasets
 export TMPDIR=/state/partition1/user/$USER
 mkdir $TMPDIR
 
-python /home/gridsan/ywang5/projects/llm-context/generate_completions_lc_dan.py --model_path "/home/gridsan/ywang5/hf/models/mistral-7b-v0.2" --attack "general_dan"
+python /home/gridsan/ywang5/projects/llm-context/generate_completions_lc_dan.py --model_path "/home/gridsan/ywang5/hf/models/mistral-7b-v0.2" --context "news"
+python /home/gridsan/ywang5/projects/llm-context/generate_completions_lc_dan.py --model_path "/home/gridsan/ywang5/hf/models/mistral-7b-v0.2" --context "values"

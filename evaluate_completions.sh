@@ -5,7 +5,10 @@ module load anaconda/2023a
 export TMPDIR=/state/partition1/user/$USER
 mkdir $TMPDIR
 
-export DISKCACHE_DIR=$TMPDIR
+export NEW_DISK_CACHE_DIR=/state/partition1/user/$USER/diskcache
+mkdir -p $NEW_DISK_CACHE_DIR
+export DISKCACHE_DIR=$NEW_DISK_CACHE_DIR
+
 export CACHE_DIR=$TMPDIR
 export HF_HOME=$TMPDIR
 export HF_DATASETS_CACHE=$TMPDIR
