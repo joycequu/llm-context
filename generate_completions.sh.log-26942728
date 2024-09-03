@@ -84,3 +84,6 @@ Setting `pad_token_id` to `eos_token_id`:2 for open-end generation.
 Setting `pad_token_id` to `eos_token_id`:2 for open-end generation.
 [2024/09/03 04:48:36] - Wrote answers to completion_filepath='completions/completion_mistral_generalDAN_news_0_harmful.json'
 Setting `pad_token_id` to `eos_token_id`:2 for open-end generation.
+Setting `pad_token_id` to `eos_token_id`:2 for open-end generation.
+[2024/09/03 04:49:18] - Wrote answers to completion_filepath='completions/completion_mistral_generalDAN_news_0_harmful.json'
+Setting `pad_token_id` to `eos_token_id`:2 for open-end generation.
