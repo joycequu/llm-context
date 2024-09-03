@@ -4,4 +4,4 @@
 [2024/09/03 03:31:35] - args.attack='generalDAN'
 [2024/09/03 03:31:35] - args.context='news'
 [2024/09/03 03:31:35] - args.behavior_data='data/behavior_datasets/harmbench_behaviors_text_all.csv'
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]slurmstepd-d-10-1-1: error: *** JOB 26942661 ON d-10-1-1 CANCELLED AT 2024-09-03T03:33:00 ***
