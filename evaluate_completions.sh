@@ -2,6 +2,16 @@
 # Loading the required module
 module load anaconda/2023a
 
+# point cuda
+export CUDA_HOME=/usr/local/pkg/cuda/cuda-11.2
+export PATH=$CUDA_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+
+# point cudnn
+export CUDNN_HOME=~/local_cuda
+export LD_LIBRARY_PATH=$CUDNN_HOME/lib64:$LD_LIBRARY_PATH
+export CPLUS_INCLUDE_PATH=$CUDNN_HOME/include:$CPLUS_INCLUDE_PATH
+
 export TMPDIR=/state/partition1/user/$USER
 mkdir $TMPDIR
 
@@ -12,9 +22,6 @@ export DISKCACHE_DIR=$NEW_DISK_CACHE_DIR
 export CACHE_DIR=$TMPDIR
 export HF_HOME=$TMPDIR
 export HF_DATASETS_CACHE=$TMPDIR
-
-export PATH=$HOME/.local/cuda/bin:$PATH
-export LD_LIBRARY_PATH=$HOME/.local/cuda/lib:$LD_LIBRARY_PATH
 
 cls_path='/home/gridsan/ywang5/hf/models/HarmBench-Llama-2-13b-cls'
 behaviors_path=$2
