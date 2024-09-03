@@ -2,20 +2,18 @@
 # Loading the required module
 module load anaconda/2023a
 
-# point cuda
 export CUDA_HOME=/usr/local/pkg/cuda/cuda-11.2
 export PATH=$CUDA_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 
-# point cudnn
 export CUDNN_HOME=~/local_cuda
 export LD_LIBRARY_PATH=$CUDNN_HOME/lib64:$LD_LIBRARY_PATH
 export CPLUS_INCLUDE_PATH=$CUDNN_HOME/include:$CPLUS_INCLUDE_PATH
 
-export TMPDIR=/state/partition1/user/$USER/evaluate
+export TMPDIR=/state/partition1/user/$USER/tmp
 mkdir $TMPDIR
 
-export NEW_DISK_CACHE_DIR=/state/partition1/user/$USER/diskcache
+export NEW_DISK_CACHE_DIR=/state/partition1/user/$USER/cache
 mkdir -p $NEW_DISK_CACHE_DIR
 export DISKCACHE_DIR=$NEW_DISK_CACHE_DIR
 

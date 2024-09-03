@@ -8,5 +8,3 @@ import csv
 from tqdm import tqdm 
 import numpy as np
 import logging
-
-from vllm import LLM, SamplingParams
