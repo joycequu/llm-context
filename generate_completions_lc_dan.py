@@ -110,7 +110,7 @@ def main(args):
     # trial run for no context
     # logger.info(f'{context_length=}')
     # generate_completions(model, tokenizer, behavior_data, args)
-
+    global context_length
     # no context
     if args.context == "news":
         logger.info(f'{context_length=}')
@@ -118,7 +118,6 @@ def main(args):
     
     for _ in range(1): # number of repeats
         for cur_length in range(1000, 4000, 1000):
-            global context_length
             context_length = cur_length
             logger.info(f'{context_length=}')
             generate_completions(model, tokenizer, behavior_data, args) # returns asr
@@ -206,6 +205,7 @@ def generate_completions(model, tokenizer, behavior_data, args):
     
     mutate_info = "mistral_" + args.attack + "_" + args.context + "_" + str(context_length)
     completion_filepath = 'completions/completion_' + mutate_info + '_harmful.json'
+    # mistral_generalDAN_values_0
 
     for behavior_id, behavior in behavior_data:
         msg = f'{behavior}'
