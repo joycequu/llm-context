@@ -11,7 +11,7 @@ import os, logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-cache_dir = '/home/gridsan/ywang5/tmp'
+cache_dir = '/state/partition1/user/$USER'
 os.makedirs(cache_dir, exist_ok=True)
 cache = dc.Cache(cache_dir)
 cache.set('key', 'value')
