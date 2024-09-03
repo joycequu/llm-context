@@ -20,7 +20,7 @@ mkdir -p $NEW_DISK_CACHE_DIR
 export DISKCACHE_DIR=$NEW_DISK_CACHE_DIR
 
 export HF_HOME=/state/partition1/user/$(whoami)/hf
-mkdir -p $(HF_HOME)
+mkdir -p $HF_HOME
 
 cls_path='/home/gridsan/ywang5/hf/models/HarmBench-Llama-2-13b-cls'
 behaviors_path='/home/gridsan/ywang5/projects/llm-context/data/behavior_datasets/harmbench_behaviors_text_all.csv'
