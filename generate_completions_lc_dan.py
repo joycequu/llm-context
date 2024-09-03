@@ -118,6 +118,7 @@ def main(args):
     
     for _ in range(1): # number of repeats
         for cur_length in range(1000, 4000, 1000):
+            global context_length
             context_length = cur_length
             logger.info(f'{context_length=}')
             generate_completions(model, tokenizer, behavior_data, args) # returns asr
