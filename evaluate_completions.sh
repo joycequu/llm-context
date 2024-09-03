@@ -18,13 +18,13 @@ mkdir $TMPDIR
 export NEW_DISK_CACHE_DIR=/state/partition1/user/$USER/diskcache
 mkdir -p $NEW_DISK_CACHE_DIR
 export DISKCACHE_DIR=$NEW_DISK_CACHE_DIR
-
 export CACHE_DIR=$TMPDIR
-export HF_HOME=$TMPDIR
-export HF_DATASETS_CACHE=$TMPDIR
+
+export HF_HOME=/home/gridsan/ywang5/hf/misc
+export HF_DATASETS_CACHE=/home/gridsan/ywang5/hf/datasets
 
 cls_path='/home/gridsan/ywang5/hf/models/HarmBench-Llama-2-13b-cls'
-behaviors_path=$2
+behaviors_path='/home/gridsan/ywang5/projects/llm-context/data/behavior_datasets/harmbench_behaviors_text_all.csv'
 completions_path='/home/gridsan/ywang5/projects/llm-context/completions/completion_mistral_general_dan_harmful.json'
 save_path='/home/gridsan/ywang5/projects/llm-context/results/results.json'
 
