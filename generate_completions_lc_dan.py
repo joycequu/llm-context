@@ -112,9 +112,9 @@ def main(args):
     # generate_completions(model, tokenizer, behavior_data, args)
     global context_length
     # no context
-    if args.context == "news":
-        logger.info(f'{context_length=}')
-        generate_completions(model, tokenizer, behavior_data, args)
+    # if args.context == "news":
+    #     logger.info(f'{context_length=}')
+    #     generate_completions(model, tokenizer, behavior_data, args)
     
     for _ in range(1): # number of repeats
         for cur_length in range(1000, 4000, 1000):
@@ -171,7 +171,7 @@ def long_context_response(model, tokenizer, msg, random_txt, args):
     conv.append_message(conv.roles[0], msg) # msg = goal = behavior
     if context_length != 0:
         logger.info("last 20 chars of random txt: %s", random_txt[-20:])
-        conv.append_messages(conv.roles[1], random_txt)
+        conv.append_message(conv.roles[1], random_txt)
     prompt = conv.get_prompt()
     generation = single_round_response(model, tokenizer, prompt)
 
