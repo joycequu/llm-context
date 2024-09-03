@@ -5,7 +5,6 @@ module load anaconda/2023a
 export HF_HOME=/home/gridsan/ywang5/hf/misc
 export HF_DATASETS_CACHE=/home/gridsan/ywang5/hf/datasets
 export TMPDIR=/state/partition1/user/$USER
-export CUDA_VISIBLE_DEVICES=""
 mkdir $TMPDIR
 
 cls_path='/home/gridsan/ywang5/hf/models/HarmBench-Llama-2-13b-cls'

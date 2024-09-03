@@ -1,6 +1,5 @@
 import transformers
 from transformers import AutoTokenizer
-import tensorflow as tf
 from vllm import LLM, SamplingParams
 import json
 import argparse
@@ -13,6 +12,7 @@ import logging
 from vllm import LLM, SamplingParams
 
 from eval_utils import compute_results_hashing, compute_results_classifier, compute_results_advbench
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(
 format='[%(asctime)s] - %(message)s',
@@ -23,16 +23,14 @@ format='[%(asctime)s] - %(message)s',
         logging.StreamHandler()
     ])
 
-
 # Set this to disable warning messages in the generation mode.
 transformers.utils.logging.set_verbosity_error()
-tf.get_logger().setLevel(logging.ERROR)
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Running red teaming with baseline methods.")
     parser.add_argument("--cls_path", type=str, default='/home/gridsan/ywang5/hf/models/HarmBench-Llama-2-13b-cls', # change this to the supercloud path!
                         help="The name or path of the classifier for computing ASR")
-    parser.add_argument("--behaviors_path", type=str, default='./data/behavior_datasets/harmbench_behaviors_text_all.csv', # default path already imported
+    parser.add_argument("--behaviors_path", type=str, default='data/behavior_datasets/harmbench_behaviors_text_all.csv', # default path already imported
                         help="The path to the behaviors file")
     parser.add_argument("--completions_path", type=str,
                         help="The path to the completions to evaluate")
