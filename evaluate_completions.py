@@ -1,18 +1,32 @@
 import transformers
 from transformers import AutoTokenizer
+import tensorflow as tf
 from vllm import LLM, SamplingParams
 import json
 import argparse
-import os
+import os, logging
 import csv
 from tqdm import tqdm 
 import numpy as np
+import logging
 
 from vllm import LLM, SamplingParams
 
 from eval_utils import compute_results_hashing, compute_results_classifier, compute_results_advbench
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+format='[%(asctime)s] - %(message)s',
+    datefmt='%Y/%m/%d %H:%M:%S',
+    level=logging.DEBUG,
+    handlers=[
+        logging.FileHandler(args.log),
+        logging.StreamHandler()
+    ])
+
+
 # Set this to disable warning messages in the generation mode.
 transformers.utils.logging.set_verbosity_error()
+tf.get_logger().setLevel(logging.ERROR)
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Running red teaming with baseline methods.")
