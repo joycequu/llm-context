@@ -9,7 +9,7 @@
 import diskcache as dc
 import os
 
-cache_dir = '/home/gridsan/ywang5/hf/misc'
+cache_dir = '/home/gridsan/ywang5/tmp'
 os.makedirs(cache_dir, exist_ok=True)
 cache = dc.Cache(cache_dir)
 cache.set('key', 'value')
