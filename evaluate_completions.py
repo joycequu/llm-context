@@ -13,15 +13,18 @@ from vllm import LLM, SamplingParams
 
 from eval_utils import compute_results_hashing, compute_results_classifier, compute_results_advbench
 
+log = 'evaluate_completions.log'
 logger = logging.getLogger(__name__)
 logging.basicConfig(
 format='[%(asctime)s] - %(message)s',
     datefmt='%Y/%m/%d %H:%M:%S',
     level=logging.DEBUG,
     handlers=[
-        logging.FileHandler(args.log),
+        logging.FileHandler(log),
         logging.StreamHandler()
     ])
+
+logger.info("all imports successful")
 
 # Set this to disable warning messages in the generation mode.
 transformers.utils.logging.set_verbosity_error()
