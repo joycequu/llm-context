@@ -13,9 +13,6 @@ export CACHE_DIR=$TMPDIR
 export HF_HOME=$TMPDIR
 export HF_DATASETS_CACHE=$TMPDIR
 
-
-
-
 cls_path='/home/gridsan/ywang5/hf/models/HarmBench-Llama-2-13b-cls'
 behaviors_path=$2
 completions_path='/home/gridsan/ywang5/projects/llm-context/completions/completion_mistral_general_dan_harmful.json'
