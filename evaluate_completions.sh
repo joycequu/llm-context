@@ -12,16 +12,15 @@ export CUDNN_HOME=~/local_cuda
 export LD_LIBRARY_PATH=$CUDNN_HOME/lib64:$LD_LIBRARY_PATH
 export CPLUS_INCLUDE_PATH=$CUDNN_HOME/include:$CPLUS_INCLUDE_PATH
 
-export TMPDIR=/state/partition1/user/$USER
+export TMPDIR=/state/partition1/user/$USER/evaluate
 mkdir $TMPDIR
 
 export NEW_DISK_CACHE_DIR=/state/partition1/user/$USER/diskcache
 mkdir -p $NEW_DISK_CACHE_DIR
 export DISKCACHE_DIR=$NEW_DISK_CACHE_DIR
-export CACHE_DIR=$TMPDIR
 
-export HF_HOME=/home/gridsan/ywang5/hf/misc
-export HF_DATASETS_CACHE=/home/gridsan/ywang5/hf/datasets
+export HF_HOME=/state/partition1/user/$(whoami)/hf
+mkdir -p $(HF_HOME)
 
 cls_path='/home/gridsan/ywang5/hf/models/HarmBench-Llama-2-13b-cls'
 behaviors_path='/home/gridsan/ywang5/projects/llm-context/data/behavior_datasets/harmbench_behaviors_text_all.csv'
