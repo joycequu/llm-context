@@ -22,7 +22,7 @@ import os
 from vllm import LLM
 
 def main():
-    cls_path = '/state/partition1/user/$USER/diskcache_test'
+    cls_path = '/state/partition1/user/$USER'
     if not os.path.exists(cls_path):
         os.makedirs(cls_path)
     
