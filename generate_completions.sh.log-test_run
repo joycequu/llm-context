@@ -6,7 +6,12 @@
 [2024/09/02 19:29:07] - args.attack='general_dan'
 [2024/09/02 19:29:07] - args.context='news'
 [2024/09/02 19:29:07] - args.behavior_data='data/behavior_datasets/harmbench_behaviors_text_all.csv'
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:08<00:17,  8.72s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:18<00:09,  9.05s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  8.46s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  8.59s/it]
+
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]
+Loading checkpoint shards:  33%|███▎      | 1/3 [00:08<00:17,  8.72s/it]
+Loading checkpoint shards:  67%|██████▋   | 2/3 [00:18<00:09,  9.05s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  8.46s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  8.59s/it]
 [2024/09/02 19:29:40] - context_length=0
 [2024/09/02 19:29:40] - context_length=0
 Setting `pad_token_id` to `eos_token_id`:2 for open-end generation.

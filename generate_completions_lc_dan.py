@@ -26,7 +26,7 @@ global general_dan_control, news_txt, values_txt, context_length, num_prompts
 os.environ["TRANSFORMERS_OFFLINE"] = "1" # running offline
 model_path = "/home/gridsan/ywang5/hf/models/mistral-7b-v0.2" # manually downloaded model
 server_path = '/home/gridsan/ywang5/projects'
-count_tokens = True
+count_tokens = False
 
 # resolve lock issue
 def use_softfilelock_in_hf():
