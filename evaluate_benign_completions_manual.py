@@ -71,12 +71,16 @@ for item in data:
     print(f'{context_length=}')
 
     # Ask for manual evaluation
-    user_eval = input(f"Is answer accurate (1-Yes, 0-No)? : ")
-    if user_eval == "":
-        if_accurate = 1
-    else:
-        if_accurate = 0
-    item['accuracy'] = if_accurate
+    while True:
+        try:
+            if_accurate = int(input("Is answer accurate (1-Yes, 0-No)? : "))
+            if if_accurate in [1, 0]:
+                item['accuracy'] = if_accurate
+                break
+            else:
+                print("Please enter 1 for Yes or 0 for No.")
+        except ValueError:
+            print("Invalid input. Please enter a number (1 or 0).")
 
     category_accuracy[category][0] += if_accurate
     category_accuracy[category][1] += 1

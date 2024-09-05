@@ -1,4 +1,0 @@
-/var/spool/slurmd/job26943517/slurm_script: line 3: module: command not found
-mkdir: cannot create directory '/state/partition1/user/ywang5': File exists
-python: can't open file '/home/gridsan/ywang5/projects/llm-context/long_context_dan.py': [Errno 2] No such file or directory
-python: can't open file '/home/gridsan/ywang5/projects/llm-context/long_context_dan.py': [Errno 2] No such file or directory
