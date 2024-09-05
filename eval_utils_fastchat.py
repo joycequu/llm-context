@@ -6,6 +6,8 @@ from datasketch import MinHash
 from tqdm import tqdm
 import copy
 
+from eval_utils_fastchat import compute_results_hashing, compute_results_classifier, compute_results_advbench
+
 # ============================== UTILS FOR EXPANDING EXPERIMENT TEMPLATES ============================== #
 
 def parse_indexing_expression(expr):
