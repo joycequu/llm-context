@@ -6,8 +6,6 @@ from datasketch import MinHash
 from tqdm import tqdm
 import copy
 
-from eval_utils_fastchat import compute_results_hashing, compute_results_classifier, compute_results_advbench
-
 # ============================== UTILS FOR EXPANDING EXPERIMENT TEMPLATES ============================== #
 
 def parse_indexing_expression(expr):
@@ -362,7 +360,7 @@ def compute_results_advbench(current_results, data):
         r['advbench_label'] = int(jailbroken)
     return current_results
 
-
+# no change from the HarmBench implementation
 def compute_results_hashing(behavior_dict, data):
     behavior_id = behavior_dict['BehaviorID']
     behavior_string = behavior_dict['Behavior']
