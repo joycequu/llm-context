@@ -1,0 +1,5 @@
+/var/spool/slurmd/job26956828/slurm_script: line 3: module: command not found
+Traceback (most recent call last):
+  File "/home/gridsan/ywang5/projects/llm-context/evaluate_completions_fastchat.py", line 270, in <module>
+    logging.FileHandler(args.log),
+AttributeError: 'Namespace' object has no attribute 'log'
