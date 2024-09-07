@@ -1,0 +1,18 @@
+/var/spool/slurmd/job26970127/slurm_script: line 3: module: command not found
+mkdir: cannot create directory '/state/partition1/user/ywang5': File exists
+[2024/09/07 19:05:29] - Namespace(model_path='/home/gridsan/ywang5/hf/models/mistral-7b-v0.2', revision='main', device='cuda', gpus=None, num_gpus=1, max_gpu_memory=None, dtype=None, load_8bit=False, cpu_offloading=False, gptq_ckpt=None, gptq_wbits=16, gptq_groupsize=-1, gptq_act_order=False, awq_ckpt=None, awq_wbits=16, awq_groupsize=-1, enable_exllama=False, exllama_max_seq_len=4096, exllama_gpu_split=None, exllama_cache_8bit=False, enable_xft=False, xft_max_seq_len=4096, xft_dtype=None, temperature=0.7, repetition_penalty=1.0, max_new_tokens=512, debug=False, behaviors_path='data/behavior_datasets/harmbench_behaviors_text_all.csv', completions_path='/home/gridsan/ywang5/projects/llm-context/completions/completion_mistral_generalDAN_news_0_harmful.json', save_path='/home/gridsan/ywang5/projects/llm-context/results/evaluation_mistral_generalDAN_news_0_harmful.json', include_advbench_metric=True, log='default')
+[2024/09/07 19:05:29] - args.model_path='/home/gridsan/ywang5/hf/models/mistral-7b-v0.2'
+[2024/09/07 19:05:29] - args.behaviors_path='data/behavior_datasets/harmbench_behaviors_text_all.csv'
+[2024/09/07 19:05:29] - args.completions_path='/home/gridsan/ywang5/projects/llm-context/completions/completion_mistral_generalDAN_news_0_harmful.json'
+[2024/09/07 19:05:29] - args.save_path='/home/gridsan/ywang5/projects/llm-context/results/evaluation_mistral_generalDAN_news_0_harmful.json'
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [01:18<02:36, 78.28s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [02:42<01:22, 82.00s/it]Loading checkpoint shards: 100%|██████████| 3/3 [04:05<00:00, 82.49s/it]Loading checkpoint shards: 100%|██████████| 3/3 [04:05<00:00, 81.99s/it]
+Traceback (most recent call last):
+  File "/home/gridsan/ywang5/projects/llm-context/evaluate_completions_fastchat.py", line 280, in <module>
+    main(args)
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/gridsan/ywang5/projects/llm-context/evaluate_completions_fastchat.py", line 87, in main
+    prompts_data = read_prompts(args)
+  File "/home/gridsan/ywang5/projects/llm-context/evaluate_completions_fastchat.py", line 97, in read_prompts
+    prompts_filepath = 'data/prompts_only/' + args.prompt_type + '_prompts.csv'
+AttributeError: 'Namespace' object has no attribute 'prompt_type'
