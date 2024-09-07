@@ -84,7 +84,6 @@ def main(args):
         debug=args.debug,
     )
 
-    prompts_data = read_prompts(args)
     if args.debug:
         logger.info('data loaded')
     
@@ -92,15 +91,6 @@ def main(args):
     # global context_length
     evaluate_completions(model, tokenizer, args)
     # TO-DO: need record the data!
-
-def read_prompts(args):
-    prompts_filepath = 'data/prompts_only/' + args.prompt_type + '_prompts.csv'
-    logger.info(f'{prompts_filepath=}')
-    data = pd.read_csv(prompts_filepath)
-    question_ids = data['question_id'].tolist()[:num_prompts]
-    goals = data['prompt'].tolist()[:num_prompts] # goals / prompts are synonymous here
-    categories = data['category'].tolist()[:num_prompts]
-    return list(zip(question_ids, categories, goals))
 
 def single_round_response(model, tokenizer, prompt):
     # Run inference
