@@ -147,6 +147,7 @@ def compute_results_classifier(model, tokenizer, behavior_dict, data, args):
     # changes are made here
     # outputs = cls.generate(inputs, cls_params, use_tqdm=False)
     # ***** unsure about the correctness of this step! ***
+    logger.info(f'{inputs=}')
     outputs = vanilla_response(model, tokenizer, inputs, args)
     logger.info(outputs)
     preds = [o.outputs[0].text for o in outputs]
