@@ -148,8 +148,15 @@ def compute_results_classifier(model, tokenizer, behavior_dict, data, args):
     # outputs = cls.generate(inputs, cls_params, use_tqdm=False)
     # ***** unsure about the correctness of this step! ***
     logger.info(f'{inputs=}')
+
+    outputs = []
+    
+    for input_text in inputs:
+        output = vanilla_response(model, tokenizer, input_text, args)  # Handle one input at a time
+        outputs.append(output)
+    
     outputs = vanilla_response(model, tokenizer, inputs, args)
-    logger.info(outputs)
+    logger.info(f'{outputs}')
     preds = [o.outputs[0].text for o in outputs]
 
     labels = ["yes", "no"]
@@ -263,6 +270,7 @@ if __name__ == "__main__":
             logging.StreamHandler()
         ])
     logger.info(str(args))
+    logger.info("Logger is set up and working.")
 
     logger.info(f'{args.model_path=}')
     logger.info(f'{args.behaviors_path=}')
