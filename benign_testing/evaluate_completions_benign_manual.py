@@ -10,6 +10,7 @@ RED = '\033[91m'
 
 completion_path = "completions/answer_mistral_general_dan_news_benign.json"
 output_path = "results/mistral_general_dan_news_benign_accuracy.csv"
+
 # Open the JSON file
 with open(completion_path, 'r') as file:
     data = json.load(file)
