@@ -1,3 +1,0 @@
-/var/spool/slurmd/job26976760/slurm_script: line 3: module: command not found
-mkdir: cannot create directory '/state/partition1/user/ywang5': File exists
-slurmstepd-d-12-6-2: error: *** JOB 26976760 ON d-12-6-2 CANCELLED AT 2024-09-08T13:15:24 ***
