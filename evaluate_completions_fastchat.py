@@ -232,7 +232,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Using Llama prompt from HarmBench to evaluate completions with FastChat.")
     add_model_args(parser)
     # previous arguments
-    parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/mistral-7b-v0.2") # model
+    parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/Meta-Llama-3.1-8B") # model
     parser.add_argument("--temperature", type=float, default=0.7) # in single_round_response
     parser.add_argument("--repetition_penalty", type=float, default=1.0) # keep
     parser.add_argument("--max-new-tokens", type=int, default=512)
