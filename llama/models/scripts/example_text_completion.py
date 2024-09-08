@@ -13,11 +13,12 @@ from typing import Optional
 
 import fire
 
-from llama.models.llama3.reference_impl.generation import Llama
+from models.llama3.reference_impl.generation import Llama
 from termcolor import cprint
 
 
 THIS_DIR = Path(__file__).parent.resolve()
+
 
 def run_main(
     ckpt_dir: str,
