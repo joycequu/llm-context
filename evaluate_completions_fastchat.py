@@ -20,6 +20,7 @@ import json
 import os
 import csv # from HarmBench
 import numpy as np
+import logging, os
 
 from eval_utils_fastchat import LLAMA2_CLS_PROMPT, compute_results_hashing, compute_results_advbench
 
@@ -90,7 +91,7 @@ def main(args):
     # logger.info(f'{context_length=}')
     # global context_length
     evaluate_completions(model, tokenizer, args)
-    # TO-DO: need record the data!
+    # TO-DO: need to record the data!
 
 def single_round_response(model, tokenizer, prompt):
     # Run inference
@@ -149,13 +150,10 @@ def compute_results_classifier(model, tokenizer, behavior_dict, data, args):
     # ***** unsure about the correctness of this step! ***
     logger.info(f'{inputs=}')
 
-    outputs = []
-    
-    for input_text in inputs:
-        output = vanilla_response(model, tokenizer, input_text, args)  # Handle one input at a time
-        outputs.append(output)
+    outputs = [vanilla_response(model, tokenizer, input_text, args) for input_text in inputs]
     
     logger.info(f'{outputs=}')
+    
     preds = outputs
     logger.info(f'{preds=}')
 
@@ -167,7 +165,7 @@ def compute_results_classifier(model, tokenizer, behavior_dict, data, args):
         current_results.append(d)
 
         if p == -1:
-            print(f"WARNING: Detected label=-1 with {behavior_string}, generation={d['generation']}")
+            logger.info(f"WARNING: Detected label=-1 with {behavior_string}, generation={d['generation']}")
     
     return current_results
 
@@ -256,7 +254,6 @@ if __name__ == "__main__":
     # Reset default repetition penalty for T5 models.
     if "t5" in args.model_path and args.repetition_penalty == 1.0:
         args.repetition_penalty = 1.2
-    import logging, os
     
     # root_log_dir = 'results'
 
