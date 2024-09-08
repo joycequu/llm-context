@@ -1,24 +1,0 @@
-/var/spool/slurmd/job26970136/slurm_script: line 3: module: command not found
-[2024/09/07 19:17:03] - Namespace(model_path='/home/gridsan/ywang5/hf/models/mistral-7b-v0.2', revision='main', device='cuda', gpus=None, num_gpus=1, max_gpu_memory=None, dtype=None, load_8bit=False, cpu_offloading=False, gptq_ckpt=None, gptq_wbits=16, gptq_groupsize=-1, gptq_act_order=False, awq_ckpt=None, awq_wbits=16, awq_groupsize=-1, enable_exllama=False, exllama_max_seq_len=4096, exllama_gpu_split=None, exllama_cache_8bit=False, enable_xft=False, xft_max_seq_len=4096, xft_dtype=None, temperature=0.7, repetition_penalty=1.0, max_new_tokens=512, debug=False, behaviors_path='data/behavior_datasets/harmbench_behaviors_text_all.csv', completions_path='/home/gridsan/ywang5/projects/llm-context/completions/completion_mistral_generalDAN_news_0_harmful.json', save_path='/home/gridsan/ywang5/projects/llm-context/results/evaluation_mistral_generalDAN_news_0_harmful.json', include_advbench_metric=True, log='default')
-[2024/09/07 19:17:03] - args.model_path='/home/gridsan/ywang5/hf/models/mistral-7b-v0.2'
-[2024/09/07 19:17:03] - args.behaviors_path='data/behavior_datasets/harmbench_behaviors_text_all.csv'
-[2024/09/07 19:17:03] - args.completions_path='/home/gridsan/ywang5/projects/llm-context/completions/completion_mistral_generalDAN_news_0_harmful.json'
-[2024/09/07 19:17:03] - args.save_path='/home/gridsan/ywang5/projects/llm-context/results/evaluation_mistral_generalDAN_news_0_harmful.json'
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:08<00:17,  8.55s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:17<00:08,  8.67s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:24<00:00,  8.10s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:24<00:00,  8.24s/it]
-  0%|          | 0/400 [00:00<?, ?it/s]  0%|          | 0/400 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/gridsan/ywang5/projects/llm-context/evaluate_completions_fastchat.py", line 270, in <module>
-    main(args)
-  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
-    return func(*args, **kwargs)
-  File "/home/gridsan/ywang5/projects/llm-context/evaluate_completions_fastchat.py", line 92, in main
-    evaluate_completions(model, tokenizer, args)
-  File "/home/gridsan/ywang5/projects/llm-context/evaluate_completions_fastchat.py", line 202, in evaluate_completions
-    current_results = compute_results_classifier(model, tokenizer, behavior_dict, data, args)
-  File "/home/gridsan/ywang5/projects/llm-context/evaluate_completions_fastchat.py", line 150, in compute_results_classifier
-    outputs = vanilla_response(model, tokenizer, inputs, args)
-  File "/home/gridsan/ywang5/projects/llm-context/evaluate_completions_fastchat.py", line 123, in vanilla_response
-    prompt = conv.get_prompt()
-  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/fastchat/conversation.py", line 147, in get_prompt
-    ret += message + " "
-TypeError: can only concatenate list (not "str") to list
