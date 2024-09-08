@@ -9,4 +9,4 @@ mkdir $TMPDIR
 
 # Set path for Llama model
 CHECKPOINT_DIR=/home/gridsan/ywang5/hf/models/Meta-Llama3.1-8B
-PYTHONPATH=$(git rev-parse --show-toplevel) torchrun llama/models/scripts/evaluate_completions_llama.py $CHECKPOINT_DIR
+PYTHONPATH=$(git rev-parse --show-toplevel) torchrun llama/models/scripts/example_text_completion.py $CHECKPOINT_DIR
