@@ -1,0 +1,33 @@
+/var/spool/slurmd/job26977714/slurm_script: line 3: module: command not found
+mkdir: cannot create directory '/state/partition1/user/ywang5': File exists
+/state/partition1/llgrid/pkg/anaconda/anaconda3-2023a/bin/python: can't open file '/home/gridsan/ywang5/projects/llm-context/llama/models/scripts/evaluate_completions_llama.py': [Errno 2] No such file or directory
+E0908 15:21:13.788134 139771607603008 torch/distributed/elastic/multiprocessing/api.py:833] failed (exitcode: 2) local_rank: 0 (pid: 1099499) of binary: /state/partition1/llgrid/pkg/anaconda/anaconda3-2023a/bin/python
+Traceback (most recent call last):
+  File "/home/gridsan/ywang5/.local/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 348, in wrapper
+    return f(*args, **kwargs)
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/torch/distributed/run.py", line 901, in main
+    run(args)
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/torch/distributed/run.py", line 892, in run
+    elastic_launch(
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 133, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/gridsan/ywang5/.local/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 264, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+llama/models/scripts/evaluate_completions_llama.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2024-09-08_15:21:13
+  host      : d-7-15-2.supercloud.mit.edu
+  rank      : 0 (local_rank: 0)
+  exitcode  : 2 (pid: 1099499)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
