@@ -155,7 +155,6 @@ def compute_results_classifier(model, tokenizer, behavior_dict, data, args):
         output = vanilla_response(model, tokenizer, input_text, args)  # Handle one input at a time
         outputs.append(output)
     
-    outputs = vanilla_response(model, tokenizer, inputs, args)
     logger.info(f'{outputs}')
     preds = [o.outputs[0].text for o in outputs]
 
