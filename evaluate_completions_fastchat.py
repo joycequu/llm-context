@@ -98,8 +98,8 @@ def single_round_response(model, tokenizer, prompt):
     inputs = tokenizer([prompt], return_tensors="pt").to(args.device)
     output_ids = model.generate(
         **inputs,
-        do_sample=True if args.temperature > 1e-5 else False,
-        temperature=args.temperature,
+        do_sample=False,
+        temperature=0.0,
         repetition_penalty=args.repetition_penalty,
         max_new_tokens=1,
     )
@@ -233,7 +233,6 @@ if __name__ == "__main__":
     add_model_args(parser)
     # previous arguments
     parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/Meta-Llama-3.1-8B") # model
-    parser.add_argument("--temperature", type=float, default=0.0) # in single_round_response
     parser.add_argument("--repetition_penalty", type=float, default=1.0) # keep
     parser.add_argument("--debug", action="store_true") # keep!
     # arguments from harmbench
