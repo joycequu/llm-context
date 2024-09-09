@@ -101,7 +101,7 @@ def single_round_response(model, tokenizer, prompt):
         do_sample=True if args.temperature > 1e-5 else False,
         temperature=args.temperature,
         repetition_penalty=args.repetition_penalty,
-        max_new_tokens=args.max_new_tokens,
+        max_new_tokens=1,
     )
 
     if model.config.is_encoder_decoder:
@@ -235,7 +235,6 @@ if __name__ == "__main__":
     parser.add_argument('--model_path', type=str, default="/home/gridsan/ywang5/hf/models/Meta-Llama-3.1-8B") # model
     parser.add_argument("--temperature", type=float, default=0.7) # in single_round_response
     parser.add_argument("--repetition_penalty", type=float, default=1.0) # keep
-    parser.add_argument("--max-new-tokens", type=int, default=512)
     parser.add_argument("--debug", action="store_true") # keep!
     # arguments from harmbench
     parser.add_argument("--behaviors_path", type=str, default='data/behavior_datasets/harmbench_behaviors_text_all.csv', # default path already imported
@@ -246,6 +245,7 @@ if __name__ == "__main__":
                         help="The path for saving results")
     parser.add_argument("--include_advbench_metric", action="store_true",
                         help="Whether to include the AdvBench refusal metric")
+    # if --include_advbench_metric is provided on the command line, the include_advbench_metric attribute will be set to True
     parser.add_argument("--log", type=str, default='default')
     # parser.add_argument("--num_tokens", type=int, default=512,
     #                     help="The number of tokens to evaluate")
