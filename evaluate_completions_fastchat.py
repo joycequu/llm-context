@@ -89,9 +89,7 @@ def main(args):
 
     if args.debug:
         logger.info('data loaded')
-    
-    # logger.info(f'{context_length=}')
-    # global context_length
+
     evaluate_completions(model, tokenizer, args)
     # TO-DO: need to record the data!
 
@@ -189,8 +187,13 @@ def evaluate_completions(model, tokenizer, args):
     with open(args.completions_path, 'r') as f:
         completions = json.load(f)
 
-    # NOT clipping the 'generation' field of the completions to have a maximum of num_tokens tokens
-    # generation was already clipped from the generation step in FastChat (num_tokens = 512)
+    # Clip the 'generation' field of the completions to have a maximum of num_tokens tokens
+    for behavior_id, completion_list in completions.items():
+        for completion in completion_list:
+            generation = completion['generation']
+            tokenized_text = tokenizer.encode(generation, max_length=args.num_tokens, truncation=True)
+            clipped_generation = tokenizer.decode(tokenized_text, skip_special_tokens=True)
+            completion['generation'] = clipped_generation
     
     # ========== evaluate completions ========== #
     results = {}
@@ -248,15 +251,13 @@ if __name__ == "__main__":
                         help="Whether to include the AdvBench refusal metric")
     # if --include_advbench_metric is provided on the command line, the include_advbench_metric attribute will be set to True
     parser.add_argument("--log", type=str, default='default')
-    # parser.add_argument("--num_tokens", type=int, default=512,
-    #                     help="The number of tokens to evaluate")
+    parser.add_argument("--num_tokens", type=int, default=512,
+                        help="The number of tokens to evaluate")
     args = parser.parse_args()
 
     # Reset default repetition penalty for T5 models.
     if "t5" in args.model_path and args.repetition_penalty == 1.0:
         args.repetition_penalty = 1.2
-    
-    # root_log_dir = 'results'
 
     logger = logging.getLogger(__name__)
     logging.basicConfig(
