@@ -84,6 +84,8 @@ def main(args):
         revision=args.revision,
         debug=args.debug,
     )
+    # set truncation side to left
+    tokenizer.truncation_side = "left" 
 
     if args.debug:
         logger.info('data loaded')
