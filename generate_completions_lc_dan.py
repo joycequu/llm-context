@@ -40,8 +40,8 @@ def read_file(filepath):
         return file.read()
 
 # dan_control
-general_dan_control = read_file('dan/general_dan.txt')
-short_dan_control = read_file('dan/short_dan.txt')
+general_dan_control = read_file('dan_prefix/general_dan.txt')
+short_dan_control = read_file('dan_prefix/short_dan.txt')
 
 # number of test_cases
 num_prompts = 400 # normally 100, 20 for trial purpose
