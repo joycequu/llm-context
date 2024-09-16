@@ -117,7 +117,7 @@ def main(args):
     #     generate_completions(model, tokenizer, behavior_data, args)
     
     for _ in range(1): # number of repeats
-        for cur_length in range(1000, 4000, 1000):
+        for cur_length in range(0, 4000, 1000):
             context_length = cur_length
             logger.info(f'{context_length=}')
             generate_completions(model, tokenizer, behavior_data, args) # returns asr
@@ -204,7 +204,7 @@ def generate_completions(model, tokenizer, behavior_data, args):
         random_txt = values_txt_dict[context_length] # updated values_txt
     
     mutate_info = "mistral_" + args.attack + "_" + args.context + "_" + str(context_length)
-    completion_filepath = 'completions/completion_' + mutate_info + '_harmful.json'
+    completion_filepath = 'harmful_testing/completions_2/completion_' + mutate_info + '_harmful.json'
     # mistral_generalDAN_values_0
 
     for behavior_id, behavior in behavior_data:
