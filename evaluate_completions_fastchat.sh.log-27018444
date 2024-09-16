@@ -5,4 +5,4 @@
 [2024/09/16 00:03:11] - args.behaviors_path='data/behavior_datasets/harmbench_behaviors_text_all.csv'
 [2024/09/16 00:03:11] - args.completions_path='/home/gridsan/ywang5/projects/llm-context/harmful_testing/completions/completion_mistral_generalDAN_news_0_harmful.json'
 [2024/09/16 00:03:11] - args.save_path='/home/gridsan/ywang5/projects/llm-context/harmful_testing/results/evaluation_llama3.1_generalDAN_news_0_harmful.json'
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:43<02:10, 43.36s/it]

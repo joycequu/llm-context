@@ -7,3 +7,10 @@ Traceback (most recent call last):
   File "/home/gridsan/ywang5/projects/llm-context/generate_completions_lc_dan.py", line 39, in read_file
     with open(filepath, 'r') as file:
 FileNotFoundError: [Errno 2] No such file or directory: 'dan/general_dan.txt'
+Starting values context...
+Traceback (most recent call last):
+  File "/home/gridsan/ywang5/projects/llm-context/generate_completions_lc_dan.py", line 43, in <module>
+    general_dan_control = read_file('dan/general_dan.txt')
+  File "/home/gridsan/ywang5/projects/llm-context/generate_completions_lc_dan.py", line 39, in read_file
+    with open(filepath, 'r') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'dan/general_dan.txt'
