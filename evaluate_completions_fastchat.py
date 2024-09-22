@@ -40,16 +40,22 @@ use_softfilelock_in_hf()
 os.environ["TRANSFORMERS_OFFLINE"] = "1" # running offline
 model_path = "/home/gridsan/ywang5/hf/models/mistral-7b-v0.2" # manually downloaded model
 server_path = '/home/gridsan/ywang5/projects'
+csv_path = '/home/gridsan/ywang5/projects/llm-context/harmful_testing/llama_evaluation_asr_news.csv'
 
 def read_file(filepath):
     with open(filepath, 'r') as file:
         return file.read()
-
-# append new results to csv: let everything now be arrays (appending every asr / 100)
+    
 def add_to_csv(output_filepath, data, if_index=False):
     df_new = pd.DataFrame(data)
-    df_existing = pd.read_csv(output_filepath)
-    df_combined = pd.concat([df_existing, df_new], axis=1, ignore_index=if_index)
+    if os.path.exists(output_filepath) and os.path.getsize(output_filepath) > 0:
+        try:
+            df_existing = pd.read_csv(output_filepath)
+            df_combined = pd.concat([df_existing, df_new], axis=1, ignore_index=if_index)
+        except pd.errors.EmptyDataError:
+            df_combined = df_new
+    else:
+        df_combined = df_new
     df_combined.to_csv(output_filepath, header=True, index=if_index)
 
 # append results to json
@@ -239,6 +245,9 @@ def evaluate_completions(model, tokenizer, args):
         success_mean = np.mean([d['label'] == 1 for d in data])
         print(f"{i}. {behavior_id} === average asr: {success_mean}")
         success_rates.append(success_mean)
+
+        data_to_add = {behavior_id: [success_mean]}
+        add_to_csv(csv_path, data_to_add, if_index=False)
     
     print("Average ASR: ", np.mean(success_rates))
 
