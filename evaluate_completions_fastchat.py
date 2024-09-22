@@ -22,7 +22,7 @@ import csv # from HarmBench
 import numpy as np
 import logging, os
 
-from eval_utils_fastchat import LLAMA2_CLS_PROMPT, compute_results_hashing, compute_results_advbench
+from eval_utils_fastchat import LLAMA2_CLS_PROMPT, LLAMA2_CLS_PROMPT_2, compute_results_hashing, compute_results_advbench
 
 # CONTROLS
 global context_length, num_prompts
@@ -94,26 +94,30 @@ def main(args):
     # TO-DO: need to record the data!
 
 def single_round_response(model, tokenizer, prompt):
-    # Run inference
     inputs = tokenizer([prompt], return_tensors="pt").to(args.device)
+
     output_ids = model.generate(
         **inputs,
         do_sample=False,
         temperature=0.0,
         repetition_penalty=args.repetition_penalty,
-        max_new_tokens=3,
-        eos_token_id=tokenizer.eos_token_id
+        max_new_tokens=2,
+        eos_token_id=tokenizer.eos_token_id,
+        # logits_processor=logits_processor,
+        early_stopping=True,
     )
 
     if model.config.is_encoder_decoder:
         output_ids = output_ids[0]
     else:
         output_ids = output_ids[0][len(inputs["input_ids"][0]) :]
+
     outputs = tokenizer.decode(
         output_ids, skip_special_tokens=True, spaces_between_special_tokens=False
-    ).strip.lower() # new
+    ).strip() # new
 
-    response = outputs.split()[0] if outputs else "" # new
+    response = outputs.split()[0].lower() if outputs else "" # .lower() --> turns to lower case
+    response = response.rstrip(',.!?')
 
     return response
 
@@ -143,26 +147,31 @@ def compute_results_classifier(model, tokenizer, behavior_dict, data, args):
     
     if 'context' in tags:
         context_string = behavior_dict['ContextString']
-        inputs = [LLAMA2_CLS_PROMPT['prompt_contextual'].format(behavior=behavior_string, generation=d['generation'], context=context_string) for d in data]
+        inputs = [LLAMA2_CLS_PROMPT_2['prompt_contextual'].format(behavior=behavior_string, generation=d['generation'], context=context_string) for d in data]
     elif 'multimodal' in tags:
         context_string = behavior_dict['RedactedImageDescription']
-        inputs = [LLAMA2_CLS_PROMPT['prompt_contextual'].format(behavior=behavior_string, generation=d['generation'], context=context_string) for d in data]
+        inputs = [LLAMA2_CLS_PROMPT_2['prompt_contextual'].format(behavior=behavior_string, generation=d['generation'], context=context_string) for d in data]
     else:
-        inputs = [LLAMA2_CLS_PROMPT['prompt'].format(behavior=behavior_string, generation=d['generation']) for d in data]
+        inputs = [LLAMA2_CLS_PROMPT_2['prompt'].format(behavior=behavior_string, generation=d['generation']) for d in data]
     
     # changes are made here
     # outputs = cls.generate(inputs, cls_params, use_tqdm=False)
     # ***** unsure about the correctness of this step! ***
     logger.info(f'{inputs=}')
 
-    outputs = [vanilla_response(model, tokenizer, input_text, args) for input_text in inputs]
-    
-    logger.info(f'{outputs=}')
-    
-    preds = outputs
-    logger.info(f'{preds=}')
-
     labels = ["yes", "no"]
+    
+    output = "None"
+    count = 0
+    while output not in labels and count < 5:
+        output = vanilla_response(model, tokenizer, inputs[0], args)
+        logger.info(f'{output=}')
+        count += 1
+        
+    # outputs = [vanilla_response(model, tokenizer, input_text, args) for input_text in inputs]
+    preds = [output]
+    logger.info(f'{preds=}')
+    
     current_results = []
     for d, p in zip(data, preds):
         p = int(p.lower() == "yes") if p.lower() in labels else -1

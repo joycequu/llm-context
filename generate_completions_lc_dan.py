@@ -112,15 +112,16 @@ def main(args):
     # generate_completions(model, tokenizer, behavior_data, args)
     global context_length
     # no context
-    # if args.context == "news":
-    #     logger.info(f'{context_length=}')
-    #     generate_completions(model, tokenizer, behavior_data, args)
-    
-    for _ in range(1): # number of repeats
-        for cur_length in range(0, 4000, 1000):
-            context_length = cur_length
-            logger.info(f'{context_length=}')
-            generate_completions(model, tokenizer, behavior_data, args) # returns asr
+    if args.context == "news":
+        logger.info(f'{context_length=}')
+        context_length = 3000
+        generate_completions(model, tokenizer, behavior_data, args)
+    else:
+        for _ in range(1): # number of repeats
+            for cur_length in range(0, 4000, 1000):
+                context_length = cur_length
+                logger.info(f'{context_length=}')
+                generate_completions(model, tokenizer, behavior_data, args) # returns asr
 
 def single_round_response(model, tokenizer, prompt):
     # Run inference
