@@ -49,7 +49,7 @@ def read_file(filepath):
 def add_to_csv(output_filepath, data, if_index=False):
     df_new = pd.DataFrame(data)
     df_existing = pd.read_csv(output_filepath)
-    df_combined = pd.concat([df_existing, df_new], ignore_index=if_index)
+    df_combined = pd.concat([df_existing, df_new], axis=1, ignore_index=if_index)
     df_combined.to_csv(output_filepath, header=True, index=if_index)
 
 # append results to json

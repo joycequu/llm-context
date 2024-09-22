@@ -44,7 +44,7 @@ general_dan_control = read_file('dan_prefix/general_dan.txt')
 short_dan_control = read_file('dan_prefix/short_dan.txt')
 
 # number of test_cases
-num_prompts = 400 # normally 100, 20 for trial purpose
+num_prompts = 100 # normally 100, 20 for trial purpose
 
 # long_context_types definition
 news_txt = read_file('random_text/news_txt.txt')
