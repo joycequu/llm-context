@@ -101,7 +101,8 @@ def single_round_response(model, tokenizer, prompt):
         do_sample=False,
         temperature=0.0,
         repetition_penalty=args.repetition_penalty,
-        max_new_tokens=1,
+        max_new_tokens=3,
+        eos_token_id=tokenizer.eos_token_id
     )
 
     if model.config.is_encoder_decoder:
@@ -110,8 +111,12 @@ def single_round_response(model, tokenizer, prompt):
         output_ids = output_ids[0][len(inputs["input_ids"][0]) :]
     outputs = tokenizer.decode(
         output_ids, skip_special_tokens=True, spaces_between_special_tokens=False
-    )
-    return outputs
+    ).strip.lower() # new
+
+    response = outputs.split()[0] if outputs else "" # new
+
+    return response
+
 
 def vanilla_response(model, tokenizer, msg, args):
     # Build the prompt with a conversation template
